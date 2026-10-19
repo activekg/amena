@@ -1,0 +1,2222 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>একটিভ কিন্ডার গার্টেন - প্রফেশনাল ম্যানেজমেন্ট সিস্টেম</title>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts for Bengali Support -->
+    <link href="https://fonts.googleapis.com/css2?family=Kalpurush&family=Tiro+Bangla&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Chart.js for Visual Graphs -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        @font-face {
+            font-family: 'SutonnyMJ';
+            src: local('SutonnyMJ'), local('SutonnyMJ Bold');
+        }
+
+        :root {
+            --primary: #1b5e20;
+            --primary-light: #4caf50;
+            --secondary: #d81b60;
+            --accent: #ff9800;
+            --bg-light: #f4f7f6;
+            --card-shadow: 0 8px 25px rgba(0,0,0,0.08);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'SutonnyMJ', 'Tiro Bangla', 'Kalpurush', sans-serif;
+            background: var(--bg-light);
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Header Styling */
+        header {
+            background: linear-gradient(135deg, #0d5314, #2e7d32, #1b5e20);
+            color: white;
+            padding: 25px 20px;
+            text-align: center;
+            border-bottom: 5px solid var(--accent);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .header-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+
+        .logo-img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 4px solid white;
+            object-fit: cover;
+            box-shadow: 0 0 15px rgba(0,0,0,0.3);
+            background: white;
+            cursor: pointer;
+        }
+
+        .header-title h1 {
+            font-size: 2.7rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.4);
+            color: #fff200;
+        }
+
+        .header-title p {
+            font-size: 1.3rem;
+            color: #e8f5e9;
+        }
+
+        /* Top Auth Bar */
+        .auth-bar {
+            background: #0f380f;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .auth-status {
+            font-weight: bold;
+            color: #ffd54f;
+        }
+
+        .btn-auth {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 6px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: 0.3s;
+            font-family: inherit;
+        }
+
+        .btn-auth:hover {
+            background: #e68a00;
+            transform: scale(1.05);
+        }
+
+        /* Navigation Menu */
+        nav {
+            background: #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            overflow-x: auto;
+            white-space: nowrap;
+            padding: 10px;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .nav-links li a {
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            color: #2e7d32;
+            font-weight: bold;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s;
+            border: 1px solid #c8e6c9;
+            background: #f1f8e9;
+        }
+
+        .nav-links li a:hover, .nav-links li a.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1300px;
+            margin: 20px auto;
+            padding: 0 15px;
+        }
+
+        .tab-content {
+            display: none;
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-header {
+            border-bottom: 3px solid var(--primary-light);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            color: var(--primary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        /* Dynamic Visibility Classes */
+        .admin-only, .editor-tools, .btn-print-action, .btn-download-action, .cv-view-btn {
+            display: none !important;
+        }
+
+        .is-admin .admin-only, .is-admin .cv-view-btn {
+            display: block !important;
+        }
+
+        .public-editable .editor-tools, .is-admin .editor-tools {
+            display: block !important;
+        }
+
+        .public-printable .btn-print-action, .is-admin .btn-print-action {
+            display: inline-flex !important;
+        }
+
+        .public-downloadable .btn-download-action, .is-admin .btn-download-action {
+            display: inline-flex !important;
+        }
+
+        /* MS WORD STYLE TOOLBAR STYLING */
+        .word-toolbar-wrapper {
+            background: #f1f3f4;
+            border: 1px solid #dcdcdc;
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 20px;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .toolbar-group-title {
+            font-size: 0.75rem;
+            color: #666;
+            font-weight: bold;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+
+        .word-toolbar-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .tool-btn {
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            transition: 0.2s;
+        }
+
+        .tool-btn:hover {
+            background: #e0e0e0;
+            border-color: #999;
+        }
+
+        .tool-select, .tool-input {
+            padding: 5px 8px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            font-size: 0.9rem;
+            background: white;
+        }
+
+        /* CERTIFICATE & WORD DOCUMENT CANVAS */
+        .cert-paper-wrapper {
+            background: #525659;
+            padding: 40px 20px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            overflow-x: auto;
+        }
+
+        .word-document-page {
+            background: #ffffff;
+            position: relative;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            box-sizing: border-box;
+            margin: 0 auto;
+            transition: all 0.3s;
+            outline: none;
+            overflow: hidden;
+        }
+
+        /* PAGE SIZE PRESETS */
+        .page-a4.portrait { width: 210mm; min-height: 297mm; padding: 15mm; }
+        .page-a4.landscape { width: 297mm; min-height: 210mm; padding: 15mm; }
+        .page-b4.portrait { width: 250mm; min-height: 353mm; padding: 15mm; }
+        .page-b4.landscape { width: 353mm; min-height: 250mm; padding: 15mm; }
+        .page-letter.portrait { width: 216mm; min-height: 279mm; padding: 15mm; }
+        .page-letter.landscape { width: 279mm; min-height: 216mm; padding: 15mm; }
+
+        /* WATERMARK LAYER */
+        .watermark-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-30deg);
+            pointer-events: none;
+            user-select: none;
+            z-index: 1;
+            text-align: center;
+            white-space: nowrap;
+            opacity: 0.12;
+            transition: all 0.3s;
+        }
+
+        .watermark-overlay.text-wm {
+            font-size: 4.5rem;
+            font-weight: bold;
+            color: #000;
+        }
+
+        .document-inner-content {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            height: 100%;
+            min-height: 100%;
+            outline: none;
+        }
+
+        .editable-result-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 0.9rem;
+        }
+
+        .editable-result-table th, .editable-result-table td {
+            border: 1px solid #333;
+            padding: 6px;
+            text-align: center;
+        }
+
+        .editable-result-table th {
+            background-color: #2e7d32;
+            color: white;
+        }
+
+        .clickable-img {
+            cursor: pointer;
+            transition: transform 0.2s, outline 0.2s;
+        }
+        .clickable-img:hover {
+            transform: scale(1.03);
+            outline: 2px dashed #1976d2;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            font-weight: bold;
+            color: #444;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-family: inherit;
+            font-size: 1rem;
+        }
+
+        .btn {
+            padding: 8px 18px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            font-family: inherit;
+            transition: 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-success { background: #2e7d32; color: white; }
+        .btn-primary { background: #1976d2; color: white; }
+        .btn-danger { background: #c62828; color: white; }
+        .btn-warning { background: #f57c00; color: white; }
+
+        .btn:hover { opacity: 0.9; }
+
+        .table-responsive { overflow-x: auto; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 0.95rem;
+        }
+
+        table th, table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        table th { background-color: #2e7d32; color: white; }
+        table tr:nth-child(even){ background-color: #f2f2f2; }
+
+        .user-photo {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .class-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .class-tab-btn {
+            padding: 8px 16px;
+            background: #e0e0e0;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            font-family: inherit;
+        }
+
+        .class-tab-btn.active { background: var(--secondary); color: white; }
+
+        .banner-container {
+            width: 100%;
+            max-height: 400px;
+            overflow: hidden;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        }
+
+        .banner-img {
+            width: 100%;
+            height: 100%;
+            max-height: 400px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .gallery-item {
+            background: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            border: 1px solid #eee;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .gallery-caption {
+            padding: 10px;
+            text-align: center;
+            font-weight: bold;
+            color: #444;
+        }
+
+        .social-contact-bar {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+
+        .social-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 18px;
+            border-radius: 25px;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .social-btn.whatsapp { background: #25D366; }
+        .social-btn.facebook { background: #1877F2; }
+        .social-btn.messenger { background: #0084FF; }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        /* CV UNIQUE STYLING */
+        .cv-card-wrapper {
+            background: #fff;
+            border: 2px solid #2e7d32;
+            border-radius: 8px;
+            padding: 25px;
+            margin-top: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .cv-header-grid {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #2e7d32;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .cv-photo-box {
+            width: 120px;
+            height: 140px;
+            border: 2px solid #2e7d32;
+            border-radius: 5px;
+            object-fit: cover;
+        }
+
+        .cv-title {
+            text-align: center;
+            flex-grow: 1;
+        }
+
+        .cv-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+        }
+
+        .cv-table td {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        .cv-table td.label-td {
+            font-weight: bold;
+            background: #f1f8e9;
+            width: 30%;
+        }
+
+        .cv-signature-img {
+            max-width: 180px;
+            max-height: 60px;
+            object-fit: contain;
+            border-bottom: 1px dashed #333;
+        }
+
+        /* HOMEPAGE SUMMARY DASHBOARD & CHARTS STYLING */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #ffffff, #f1f8e9);
+            border-left: 6px solid var(--primary);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            transition: transform 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-icon {
+            font-size: 2.8rem;
+            color: var(--primary);
+        }
+
+        .stat-info h4 {
+            font-size: 1rem;
+            color: #666;
+        }
+
+        .stat-info span {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .charts-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .chart-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #e0e0e0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .chart-card h4 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            text-align: center;
+            border-bottom: 2px solid #f1f8e9;
+            padding-bottom: 8px;
+        }
+
+        .head-speech-grid {
+            display: grid;
+            grid-template-columns: 220px 1fr;
+            gap: 20px;
+            background: #f9fbf9;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #c8e6c9;
+            margin-bottom: 30px;
+            align-items: center;
+        }
+
+        @media (max-width: 768px) {
+            .head-speech-grid { grid-template-columns: 1fr; text-align: center; }
+            .head-speech-grid img { margin: 0 auto; }
+        }
+
+        @media print {
+            body * { visibility: hidden; }
+            .word-document-page, .word-document-page *, .printable-cv-area, .printable-cv-area * { visibility: visible !important; }
+            .cert-paper-wrapper { background: none !important; padding: 0 !important; }
+            .word-document-page, .printable-cv-area { 
+                position: absolute !important; 
+                left: 0 !important; 
+                top: 0 !important; 
+                box-shadow: none !important;
+                margin: 0 !important;
+                width: 100% !important;
+            }
+        }
+    </style>
+</head>
+<body id="app-body">
+
+    <!-- Universal File Picker for Camera & Gallery Touch Support -->
+    <input type="file" id="universal-camera-picker" accept="image/*" style="display:none;">
+
+    <!-- Header Section -->
+    <header>
+        <div class="header-container">
+            <img id="school-logo" src="https://via.placeholder.com/120?text=Logo" alt="লোগো" class="logo-img clickable-img" onclick="triggerImgChange(this)" title="টাচ করে ক্যামেরা/গ্যালারি থেকে লোগো বদলান">
+            <div class="header-title">
+                <h1 id="site-title">একটিভ কিন্ডার গার্টেন</h1>
+                <p id="site-headteacher">প্রধান শিক্ষক: মোছাঃ আমিনা খানম</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Top Auth Bar -->
+    <div class="auth-bar">
+        <div class="auth-status" id="user-status-text">
+            <i class="fas fa-user-shield"></i> আপনি বর্তমানে অতিথি হিসেবে আছেন (ভিউ মোড)
+        </div>
+        <div>
+            <button class="btn-auth" id="login-btn" onclick="openLoginModal()"><i class="fas fa-sign-in-alt"></i> এডমিন লগইন</button>
+            <button class="btn-auth" id="logout-btn" onclick="logout()" style="display:none; background:#c62828;"><i class="fas fa-sign-out-alt"></i> লগআউট</button>
+        </div>
+    </div>
+
+    <!-- Navigation Menu (Dynamically Controlled by Admin) -->
+    <nav>
+        <ul class="nav-links" id="main-nav-list">
+            <li id="nav-home" class="nav-home-li"><a href="#" class="active" onclick="switchTab('home', this)"><i class="fas fa-home"></i> হোম</a></li>
+            <li id="nav-students" class="nav-students-li"><a href="#" onclick="switchTab('students', this)"><i class="fas fa-user-graduate"></i> শিক্ষার্থী তথ্য</a></li>
+            <li id="nav-admission" class="nav-admission-li"><a href="#" onclick="switchTab('admission', this)"><i class="fas fa-file-signature"></i> ভর্তির আবেদন</a></li>
+            <li id="nav-teacher-apply" class="nav-teacher-apply-li"><a href="#" onclick="switchTab('teacher-apply', this)"><i class="fas fa-user-plus"></i> নিয়োগের আবেদন</a></li>
+            <li id="nav-teachers" class="nav-teachers-li"><a href="#" onclick="switchTab('teachers', this)"><i class="fas fa-chalkboard-teacher"></i> শিক্ষক ও কর্মচারী</a></li>
+            <li id="nav-waiver" class="nav-waiver-li"><a href="#" onclick="switchTab('waiver', this)"><i class="fas fa-hand-holding-usd"></i> বেতন মওকুফ</a></li>
+            <li id="nav-results" class="nav-results-li"><a href="#" onclick="switchTab('results', this)"><i class="fas fa-poll"></i> ফলাফল শীট</a></li>
+            <li id="nav-testimonial" class="nav-testimonial-li"><a href="#" onclick="switchTab('testimonial', this)"><i class="fas fa-award"></i> প্রশংসাপত্র</a></li>
+            <li id="nav-certificate" class="nav-certificate-li"><a href="#" onclick="switchTab('certificate', this)"><i class="fas fa-certificate"></i> সনদপত্র</a></li>
+            <li id="nav-scholarship" class="nav-scholarship-li"><a href="#" onclick="switchTab('scholarship', this)"><i class="fas fa-medal"></i> বৃত্তি সংক্রান্ত</a></li>
+            <li id="nav-settings" class="admin-only"><a href="#" onclick="switchTab('settings', this)"><i class="fas fa-cogs"></i> এডমিন কন্ট্রোল</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container">
+
+        <!-- 1. Home Section -->
+        <div id="home" class="tab-content active">
+            <!-- Banner Board -->
+            <div class="banner-container">
+                <img id="home-banner-img" src="https://via.placeholder.com/1200x400?text=Active+Kindergarten+Banner" alt="হোমপেজ ব্যানার" class="banner-img clickable-img" onclick="triggerImgChange(this)" title="টাচ করে ব্যানার পরিবর্তন করুন">
+            </div>
+
+            <!-- Emergency Notice Board with Marquee/Highlight -->
+            <div style="background: #e8f5e9; padding: 18px; border-radius: 8px; margin-bottom: 25px; border-left: 5px solid var(--primary); box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+                <h3 style="color:var(--primary);"><i class="fas fa-bullhorn"></i> জরুরী নোটিশ বোর্ড</h3>
+                <marquee scrollamount="5" style="font-weight:bold; color:#2e7d32; font-size:1.1rem; margin-top:5px;" id="site-notice">আমাদের প্রতিষ্ঠানের শিক্ষার্থী, শিক্ষক এবং শিক্ষামূলক যাবতীয় তথ্যের জন্য এই প্যানেলটি ব্যবহার করুন।</marquee>
+            </div>
+
+            <!-- KEY METRICS SUMMARY CARDS -->
+            <div class="section-header">
+                <h2><i class="fas fa-chart-line"></i> প্রতিষ্ঠানের তথ্যের সারমর্ম (Key Summary)</h2>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <i class="fas fa-user-graduate stat-icon"></i>
+                    <div class="stat-info">
+                        <h4>মোট শিক্ষার্থী</h4>
+                        <span id="stat-total-students">০</span>
+                    </div>
+                </div>
+                <div class="stat-card" style="border-left-color: var(--secondary);">
+                    <i class="fas fa-chalkboard-teacher stat-icon" style="color: var(--secondary);"></i>
+                    <div class="stat-info">
+                        <h4>মোট শিক্ষক ও কর্মচারী</h4>
+                        <span id="stat-total-teachers" style="color: var(--secondary);">০</span>
+                    </div>
+                </div>
+                <div class="stat-card" style="border-left-color: var(--accent);">
+                    <i class="fas fa-award stat-icon" style="color: var(--accent);"></i>
+                    <div class="stat-info">
+                        <h4>বৃত্তি প্রাপ্ত শিক্ষার্থী</h4>
+                        <span id="stat-total-scholarship" style="color: var(--accent);">০</span>
+                    </div>
+                </div>
+                <div class="stat-card" style="border-left-color: #1976d2;">
+                    <i class="fas fa-school stat-icon" style="color: #1976d2;"></i>
+                    <div class="stat-info">
+                        <h4>মোট শ্রেণি/শাখা</h4>
+                        <span>৭ টি</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VISUAL GRAPH CHARTS SECTION -->
+            <div class="section-header">
+                <h2><i class="fas fa-chart-pie"></i> ডাটা গ্রাফ ও পরিসংখ্যান (Graphical Analysis)</h2>
+            </div>
+            <div class="charts-container">
+                <div class="chart-card">
+                    <h4><i class="fas fa-chart-bar"></i> শ্রেণিভিত্তিক শিক্ষার্থী সংখ্যা</h4>
+                    <canvas id="studentClassChart" height="200"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h4><i class="fas fa-chart-pie"></i> শিক্ষার্থী পাসের হার ও উপস্থিতি</h4>
+                    <canvas id="performanceChart" height="200"></canvas>
+                </div>
+            </div>
+
+            <!-- HEAD TEACHER INFO & SPEECH SECTION -->
+            <div class="section-header">
+                <h2><i class="fas fa-user-tie"></i> প্রধান শিক্ষকের বাণী ও বিদ্যালয় পরিচিতি</h2>
+            </div>
+            <div class="head-speech-grid">
+                <img id="home-headteacher-img" src="https://via.placeholder.com/200x220?text=Head+Teacher" style="width:180px; height:200px; object-fit:cover; border-radius:10px; border:3px solid var(--primary);" class="clickable-img" onclick="triggerImgChange(this)" title="ছবি পরিবর্তন করুন">
+                <div>
+                    <h3 style="color:var(--primary);" id="home-headteacher-name">মোছাঃ আমিনা খানম</h3>
+                    <p style="font-weight:bold; color:#666; margin-bottom:10px;">প্রধান শিক্ষক - <span class="title-display">একটিভ কিন্ডার গার্টেন</span></p>
+                    <p style="text-align:justify; color:#444; line-height:1.8;" id="home-headteacher-speech">
+                        একটিভ কিন্ডার গার্টেন সুশিক্ষা ও সুশৃঙ্খল পরিবেশ বজায় রেখে প্রতিটি শিশুর মেধাবিকাশে কাজ করে চলেছে। আমাদের দক্ষ শিক্ষকমণ্ডলী ও আধুনিক শিক্ষাদান পদ্ধতি শিক্ষার্থীদের উজ্জ্বল ভবিষ্যৎ গঠনে প্রতিশ্রুতিবদ্ধ।
+                    </p>
+                </div>
+            </div>
+
+            <!-- ABOUT SCHOOL INFO -->
+            <div style="background:#fff; padding:20px; border-radius:10px; border:1px solid #e0e0e0; margin-bottom:25px;">
+                <h3 style="color:var(--primary); margin-bottom:10px;"><i class="fas fa-university"></i> বিদ্যালয় পরিচিতি</h3>
+                <p style="text-align:justify; color:#555; line-height:1.8;" id="home-school-about">
+                    একটিভ কিন্ডার গার্টেন ধুনট, বগুড়ায় অবস্থিত একটি স্বনামধন্য শিক্ষা প্রতিষ্ঠান। আমরা শিশুদের প্রাথমিক শিক্ষা থেকে শুরু করে নৈতিক শিক্ষা প্রদান করে দক্ষ ও সৎ নাগরিক হিসেবে গড়ে তুলতে নিরলস কাজ করে যাচ্ছি।
+                </p>
+            </div>
+
+            <!-- Home page Teacher Recruitment Banner/Action -->
+            <div style="background: #fff3e0; padding: 20px; border-radius: 8px; margin-bottom: 25px; border-left: 5px solid var(--accent); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+                <div>
+                    <h3 style="color: #e65100;"><i class="fas fa-briefcase"></i> শিক্ষক ও কর্মচারী নিয়োগ চলছে!</h3>
+                    <p style="color: #5d4037;">আমাদের প্রতিষ্ঠানে আবেদন করতে ইচ্ছুক প্রার্থীগণ অনলাইন আবেদন ফর্মটি পূরণ করুন।</p>
+                </div>
+                <button class="btn btn-warning" onclick="switchTab('teacher-apply', document.getElementById('nav-teacher-apply').querySelector('a'))"><i class="fas fa-paper-plane"></i> নিয়োগের আবেদন করুন</button>
+            </div>
+
+            <div style="margin-top: 30px;">
+                <div class="section-header">
+                    <h3><i class="fas fa-images"></i> আমাদের ফটো গ্যালারি</h3>
+                </div>
+                <div class="admin-only" style="margin-bottom:15px; background:#f1f3f4; padding:15px; border-radius:8px;">
+                    <div class="form-grid" style="background:transparent; border:none; padding:0;">
+                        <div class="form-group"><label>গ্যালারির ছবি (Touch)</label><input type="file" id="gal-file" accept="image/*"></div>
+                        <div class="form-group"><label>ছবির বিবরণ</label><input type="text" id="gal-cap" placeholder="ক্যাপশন লিখুন"></div>
+                    </div>
+                    <button class="btn btn-success" onclick="addGalleryPhoto()"><i class="fas fa-plus"></i> ছবি যুক্ত করুন</button>
+                </div>
+                <div class="gallery-grid" id="gallery-container"></div>
+            </div>
+
+            <div style="margin-top: 30px; background: #fdfdfd; padding: 20px; border-radius: 8px; border: 1px solid #e0e0e0;">
+                <h3><i class="fas fa-headset"></i> কর্তৃপক্ষের সাথে যোগাযোগ</h3>
+                <div class="social-contact-bar">
+                    <a id="link-whatsapp" href="#" target="_blank" class="social-btn whatsapp"><i class="fab fa-whatsapp"></i> হোয়াটসঅ্যাপ</a>
+                    <a id="link-facebook" href="#" target="_blank" class="social-btn facebook"><i class="fab fa-facebook"></i> ফেসবুক পেজ</a>
+                    <a id="link-messenger" href="#" target="_blank" class="social-btn messenger"><i class="fab fa-facebook-messenger"></i> মেসেঞ্জার</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. Students Section -->
+        <div id="students" class="tab-content">
+            <div class="section-header">
+                <h2><i class="fas fa-user-graduate"></i> শ্রেণিভিত্তিক শিক্ষার্থী তথ্য</h2>
+            </div>
+
+            <div class="class-tabs">
+                <button class="class-tab-btn active" onclick="filterStudentClass('play', this)">প্লে</button>
+                <button class="class-tab-btn" onclick="filterStudentClass('nursery', this)">নার্সারি</button>
+                <button class="class-tab-btn" onclick="filterStudentClass('class1', this)">প্রথম শ্রেণি</button>
+                <button class="class-tab-btn" onclick="filterStudentClass('class2', this)">দ্বিতীয় শ্রেণি</button>
+                <button class="class-tab-btn" onclick="filterStudentClass('class3', this)">তৃতীয় শ্রেণি</button>
+                <button class="class-tab-btn" onclick="filterStudentClass('class4', this)">চতুর্থ শ্রেণি</button>
+                <button class="class-tab-btn" onclick="filterStudentClass('class5', this)">পঞ্চম শ্রেণি</button>
+            </div>
+            
+            <div class="word-toolbar-wrapper editor-tools">
+                <div class="toolbar-group-title"><i class="fas fa-font"></i> ফন্ট ও স্টাইল কন্ট্রোল</div>
+                <div class="word-toolbar-row" style="margin-bottom:10px;">
+                    <select class="tool-select" onchange="execCmd('fontName', this.value)"><option value="SutonnyMJ">SutonnyMJ</option><option value="Kalpurush">Kalpurush</option><option value="Arial">Arial</option></select>
+                    <select class="tool-select" onchange="execCmd('fontSize', this.value)"><option value="3">12pt</option><option value="4">14pt</option><option value="5">18pt</option></select>
+                    <button class="tool-btn" onclick="execCmd('bold')"><i class="fas fa-bold"></i></button>
+                    <button class="tool-btn" onclick="execCmd('italic')"><i class="fas fa-italic"></i></button>
+                    <label class="tool-btn"><i class="fas fa-palette"></i> কালার <input type="color" onchange="execCmd('foreColor', this.value)" style="opacity:0; width:0; height:0;"></label>
+                </div>
+            </div>
+
+            <div class="admin-only">
+                <div class="form-grid">
+                    <div class="form-group"><label>শিক্ষার্থীর নাম</label><input type="text" id="st-name" placeholder="নাম লিখুন"></div>
+                    <div class="form-group"><label>রোল নম্বর</label><input type="number" id="st-roll" placeholder="রোল"></div>
+                    <div class="form-group"><label>অভিভাবকের নাম</label><input type="text" id="st-guardian" placeholder="অভিভাবক"></div>
+                    <div class="form-group"><label>মোবাইল</label><input type="text" id="st-phone" placeholder="মোবাইল"></div>
+                    <div class="form-group"><label>ছবি (Touch করে ক্যামেরা/গ্যালারি)</label><input type="file" id="st-photo" accept="image/*"></div>
+                </div>
+                <button class="btn btn-success" onclick="addStudent()"><i class="fas fa-plus"></i> শিক্ষার্থী যুক্ত করুন</button>
+            </div>
+
+            <div class="cert-paper-wrapper" style="margin-top:20px;">
+                <div class="word-document-page page-a4 portrait" id="student-word-page">
+                    <div class="watermark-overlay text-wm" id="student-wm-layer">একটিভ কিন্ডার গার্টেন</div>
+                    <div class="document-inner-content" id="student-content-box" contenteditable="false" spellcheck="false">
+                        <div style="text-align:center; border-bottom:2px solid #1b5e20; padding-bottom:10px; margin-bottom:15px;">
+                            <img src="https://via.placeholder.com/70?text=Logo" class="clickable-img" style="width:70px; height:70px; object-fit:contain; border-radius:50%;" onclick="triggerImgChange(this)">
+                            <h2 style="color:#1b5e20;" class="title-display">একটিভ কিন্ডার গার্টেন</h2>
+                            <p>শিক্ষার্থী তথ্য তালিকা - <span id="lbl-current-student-class">প্লে</span></p>
+                        </div>
+                        <div class="table-responsive">
+                            <table>
+                                <thead><tr><th>ছবি</th><th>রোল</th><th>নাম</th><th>অভিভাবক</th><th>মোবাইল</th><th class="admin-only">অ্যাকশন</th></tr></thead>
+                                <tbody id="student-table-body"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="margin-top:20px; display:flex; gap:10px;">
+                <button class="btn btn-primary btn-print-action" onclick="window.print()"><i class="fas fa-print"></i> প্রিন্ট করুন</button>
+                <button class="btn btn-success btn-download-action" onclick="window.print()"><i class="fas fa-download"></i> ডাউনলোড (PDF)</button>
+            </div>
+        </div>
+
+        <!-- 3. Admission Request Section -->
+        <div id="admission" class="tab-content">
+            <div class="section-header">
+                <h2><i class="fas fa-file-signature"></i> অনলাইন ভর্তির আবেদন ফরম ও এডিটর</h2>
+            </div>
+            
+            <div class="word-toolbar-wrapper editor-tools">
+                <div class="toolbar-group-title"><i class="fas fa-font"></i> ফন্ট ও ফরম্যাট কন্ট্রোল</div>
+                <div class="word-toolbar-row">
+                    <select class="tool-select" onchange="execCmd('fontName', this.value)"><option value="SutonnyMJ">SutonnyMJ</option><option value="Kalpurush">Kalpurush</option><option value="Arial">Arial</option></select>
+                    <select class="tool-select" onchange="execCmd('fontSize', this.value)"><option value="3">12pt</option><option value="4">14pt</option></select>
+                    <button class="tool-btn" onclick="execCmd('bold')"><i class="fas fa-bold"></i></button>
+                </div>
+            </div>
+
+            <div class="cert-paper-wrapper">
+                <div class="word-document-page page-a4 portrait" id="adm-word-page">
+                    <div class="watermark-overlay text-wm" id="adm-wm-layer">একটিভ কিন্ডার গার্টেন</div>
+                    <div class="document-inner-content" id="adm-content-box" contenteditable="false" spellcheck="false">
+                        <div style="text-align:center; border-bottom:2px solid #1b5e20; padding-bottom:10px; margin-bottom:15px;">
+                            <img src="https://via.placeholder.com/80?text=Logo" class="clickable-img" style="width:70px; height:70px; object-fit:contain; border-radius:50%;" onclick="triggerImgChange(this)" title="লোগো দিন">
+                            <h2 style="color:#1b5e20; margin-top:5px;" class="title-display">একটিভ কিন্ডার গার্টেন</h2>
+                            <p>অনলাইন ভর্তির আবেদন ফরম - ২০২৬</p>
+                        </div>
+                        
+                        <form onsubmit="submitAdmission(event)">
+                            <div class="form-grid" style="background:transparent; border:none; padding:0;">
+                                <div class="form-group"><label>১) শিক্ষার্থীর নাম (বাংলা)</label><input type="text" required placeholder="বাংলায়"></div>
+                                <div class="form-group"><label>১) শিক্ষার্থীর নাম (ইংরেজি)</label><input type="text" required placeholder="English"></div>
+                                <div class="form-group"><label>২) জন্ম তারিখ</label><input type="date" required></div>
+                                <div class="form-group"><label>৩) জন্ম নিবন্ধন নম্বর</label><input type="text" required placeholder="১৭ ডিজিট"></div>
+                                <div class="form-group"><label>৪) পিতার নাম (বাংলা)</label><input type="text" required></div>
+                                <div class="form-group"><label>৪) পিতার নাম (ইংরেজি)</label><input type="text" required></div>
+                                <div class="form-group"><label>৫) পিতার NID নম্বর</label><input type="text" required></div>
+                                <div class="form-group"><label>৬) মাতার নাম (বাংলা)</label><input type="text" required></div>
+                                <div class="form-group"><label>৬) মাতার নাম (ইংরেজি)</label><input type="text" required></div>
+                                <div class="form-group"><label>৭) মাতার NID নম্বর</label><input type="text" required></div>
+                                <div class="form-group"><label>৮) ধর্ম</label><select required><option value="">নির্বাচন</option><option>ইসলাম</option><option>হিন্দু</option><option>বৌদ্ধ</option><option>খ্রিস্টান</option></select></div>
+                                <div class="form-group"><label>আবেদনকৃত শ্রেণি</label><select required><option value="">শ্রেণি নির্বাচন</option><option>প্লে</option><option>নার্সারি</option><option>প্রথম শ্রেণি</option><option>দ্বিতীয় শ্রেণি</option><option>তৃতীয় শ্রেণি</option><option>চতুর্থ শ্রেণি</option><option>পঞ্চম শ্রেণি</option></select></div>
+                                <div class="form-group full-width"><label>৯) বর্তমান ঠিকানা</label><textarea rows="2" required></textarea></div>
+                                <div class="form-group full-width"><label>১০) স্থায়ী ঠিকানা</label><textarea rows="2" required></textarea></div>
+                            </div>
+                            <button type="submit" class="btn btn-primary" style="margin-top:15px;"><i class="fas fa-paper-plane"></i> আবেদন জমা দিন</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top:20px; display:flex; gap:10px;">
+                <button class="btn btn-primary btn-print-action" onclick="window.print()"><i class="fas fa-print"></i> ফরম প্রিন্ট করুন</button>
+                <button class="btn btn-success btn-download-action" onclick="window.print()"><i class="fas fa-download"></i> ডাউনলোড (PDF)</button>
+            </div>
+        </div>
+
+        <!-- TEACHER & STAFF RECRUITMENT APPLICATION FORM -->
+        <div id="teacher-apply" class="tab-content">
+            <div class="section-header">
+                <h2><i class="fas fa-user-plus"></i> শিক্ষক ও কর্মচারী নিয়োগের আবেদন ফরম</h2>
+            </div>
+            
+            <form onsubmit="submitTeacherApplication(event)">
+                <div class="form-grid">
+                    <div class="form-group"><label>১) নাম (বাংলা) *</label><input type="text" id="app-tc-name-bn" required placeholder="বাংলায় লিখুন"></div>
+                    <div class="form-group"><label>১) নাম (ইংরেজি) *</label><input type="text" id="app-tc-name-en" required placeholder="In English"></div>
+                    <div class="form-group"><label>২) পদবি / পদের নাম *</label><input type="text" id="app-tc-desig" required placeholder="যেমন: সহকারী শিক্ষক / কর্মচারী"></div>
+                    <div class="form-group"><label>৩) জন্ম নিবন্ধন নম্বর *</label><input type="text" id="app-tc-birth" required placeholder="জন্ম নিবন্ধন নম্বর"></div>
+                    <div class="form-group"><label>৪) NID নম্বর (যদি থাকে)</label><input type="text" id="app-tc-nid" placeholder="জাতীয় পরিচয়পত্র নম্বর"></div>
+                    <div class="form-group"><label>৫) পিতার নাম (বাংলা) *</label><input type="text" id="app-tc-fname-bn" required></div>
+                    <div class="form-group"><label>৫) পিতার নাম (ইংরেজি) *</label><input type="text" id="app-tc-fname-en" required></div>
+                    <div class="form-group"><label>৬) পিতার NID (যদি থাকে)</label><input type="text" id="app-tc-fnid"></div>
+                    <div class="form-group"><label>৭) মাতার নাম (বাংলা) *</label><input type="text" id="app-tc-mname-bn" required></div>
+                    <div class="form-group"><label>৭) মাতার নাম (ইংরেজি) *</label><input type="text" id="app-tc-mname-en" required></div>
+                    <div class="form-group"><label>৮) মাতার NID (যদি থাকে)</label><input type="text" id="app-tc-mnid"></div>
+                    <div class="form-group"><label>৯) ধর্ম *</label>
+                        <select id="app-tc-religion" required>
+                            <option value="">নির্বাচন করুন</option>
+                            <option>ইসলাম</option>
+                            <option>হিন্দু</option>
+                            <option>বৌদ্ধ</option>
+                            <option>খ্রিস্টান</option>
+                        </select>
+                    </div>
+                    <div class="form-group"><label>১০) মোবাইল নম্বর *</label><input type="text" id="app-tc-phone" required placeholder="017XXXXXXXX"></div>
+                    <div class="form-group"><label>১১) প্রার্থীর ছবি (Touch camera/gallery)</label><input type="file" id="app-tc-photo" accept="image/*"></div>
+                    <div class="form-group"><label>১২) স্বাক্ষর আপলোড (Signature Image)</label><input type="file" id="app-tc-sig" accept="image/*"></div>
+                    
+                    <div class="form-group full-width"><label>১৩) বর্তমান ঠিকানা *</label><textarea id="app-tc-present-addr" rows="2" required></textarea></div>
+                    <div class="form-group full-width"><label>১৪) স্থায়ী ঠিকানা *</label><textarea id="app-tc-perm-addr" rows="2" required></textarea></div>
+                    
+                    <div class="form-group full-width">
+                        <label>১৫) ধারাবাহিকভাবে শিক্ষাগত যোগ্যতা</label>
+                        <textarea id="app-tc-edu" rows="3" required placeholder="যেমন: 
+এসএসসি - রাজশাহী বোর্ড - ২০১৫ - ৪.৫০
+এইচএসসি - রাজশাহী বোর্ড - ২০১৭ - ৪.২৫
+বিএ (অনার্স) - রাজশাহী বিশ্ববিদ্যালয় - ২০২১ - ৩.২০"></textarea>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-success"><i class="fas fa-paper-plane"></i> নিয়োগ আবেদন জমা দিন</button>
+            </form>
+        </div>
+
+        <!-- 4. Teachers Section -->
+        <div id="teachers" class="tab-content">
+            <div class="section-header">
+                <h2><i class="fas fa-chalkboard-teacher"></i> শিক্ষক ও কর্মচারী তথ্য ও CV ম্যানেজমেন্ট</h2>
+            </div>
+            <div class="word-toolbar-wrapper editor-tools">
+                <div class="toolbar-group-title"><i class="fas fa-font"></i> ফন্ট ও স্টাইল কন্ট্রোল</div>
+                <div class="word-toolbar-row">
+                    <select class="tool-select" onchange="execCmd('fontName', this.value)"><option value="SutonnyMJ">SutonnyMJ</option><option value="Kalpurush">Kalpurush</option><option value="Arial">Arial</option></select>
+                    <button class="tool-btn" onclick="execCmd('bold')"><i class="fas fa-bold"></i></button>
+                </div>
+            </div>
+
+            <!-- Full Teacher Info Input Form for Admin/Users -->
+            <div class="admin-only" style="background:#e8f5e9; padding:20px; border-radius:8px; margin-bottom:20px;">
+                <h3><i class="fas fa-user-plus"></i> নতুন শিক্ষক/কর্মচারী পূর্ণাঙ্গ তথ্য ফর্ম</h3>
+                <div class="form-grid" style="margin-top:15px;">
+                    <div class="form-group"><label>১) শিক্ষকের নাম (বাংলা) *</label><input type="text" id="tc-name-bn" placeholder="বাংলায়"></div>
+                    <div class="form-group"><label>১) শিক্ষকের নাম (ইংরেজি) *</label><input type="text" id="tc-name-en" placeholder="In English"></div>
+                    <div class="form-group"><label>২) পদবি *</label><input type="text" id="tc-designation" placeholder="যেমন: প্রধান শিক্ষক / সহকারী শিক্ষক"></div>
+                    <div class="form-group"><label>৩) জন্ম নিবন্ধন নম্বর</label><input type="text" id="tc-birth-no" placeholder="১৭ ডিজিট"></div>
+                    <div class="form-group"><label>৪) NID নাম্বার (যদি থাকে)</label><input type="text" id="tc-nid" placeholder="এনআইডি নম্বর"></div>
+                    <div class="form-group"><label>৫) পিতার নাম (বাংলা)</label><input type="text" id="tc-fname-bn"></div>
+                    <div class="form-group"><label>৫) পিতার নাম (ইংরেজি)</label><input type="text" id="tc-fname-en"></div>
+                    <div class="form-group"><label>৬) পিতার NID (যদি থাকে)</label><input type="text" id="tc-fnid"></div>
+                    <div class="form-group"><label>৭) মাতার নাম (বাংলা)</label><input type="text" id="tc-mname-bn"></div>
+                    <div class="form-group"><label>৭) মাতার নাম (ইংরেজি)</label><input type="text" id="tc-mname-en"></div>
+                    <div class="form-group"><label>৮) মাতার NID (যদি থাকে)</label><input type="text" id="tc-mnid"></div>
+                    <div class="form-group"><label>৯) ধর্ম</label>
+                        <select id="tc-religion">
+                            <option value="ইসলাম">ইসলাম</option>
+                            <option value="হিন্দু">হিন্দু</option>
+                            <option value="বৌদ্ধ">বৌদ্ধ</option>
+                            <option value="খ্রিস্টান">খ্রিস্টান</option>
+                        </select>
+                    </div>
+                    <div class="form-group"><label>১০) মোবাইল *</label><input type="text" id="tc-phone" placeholder="017XXXXXXXX"></div>
+                    <div class="form-group"><label>১১) প্রার্থীর ছবি (Touch camera/gallery)</label><input type="file" id="tc-photo" accept="image/*"></div>
+                    <div class="form-group"><label>১২) স্বাক্ষর আপলোড (Signature Upload)</label><input type="file" id="tc-signature" accept="image/*"></div>
+                    
+                    <div class="form-group full-width"><label>১৩) বর্তমান ঠিকানা</label><textarea id="tc-present-addr" rows="2"></textarea></div>
+                    <div class="form-group full-width"><label>১৪) স্থায়ী ঠিকানা</label><textarea id="tc-perm-addr" rows="2"></textarea></div>
+                    
+                    <div class="form-group full-width">
+                        <label>১৫) ধারাবাহিকভাবে শিক্ষাগত যোগ্যতা (SSC, HSC, Honors, Degree ইত্যাদি)</label>
+                        <textarea id="tc-education" rows="3" placeholder="ডিগ্রি / বোর্ড বা বিশ্ববিদ্যালয় / সাল / জিপিএ"></textarea>
+                    </div>
+                </div>
+                <button class="btn btn-success" onclick="addTeacherFull()"><i class="fas fa-plus"></i> শিক্ষক/কর্মচারী সংরক্ষণ করুন</button>
+            </div>
+
+            <!-- Teachers List Table -->
+            <div class="table-responsive" style="margin-top:20px;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ছবি</th>
+                            <th>নাম (বাংলা ও ইংরেজি)</th>
+                            <th>পদবি</th>
+                            <th>মোবাইল</th>
+                            <th class="cv-view-btn">সিভি (CV) ভিউ</th>
+                            <th class="admin-only">অ্যাকশন</th>
+                        </tr>
+                    </thead>
+                    <tbody id="teacher-table-body"></tbody>
+                </table>
+            </div>
+
+            <!-- DYNAMIC CV DISPLAY AREA FOR SELECTED TEACHER (ADMIN ONLY VIEWABLE) -->
+            <div id="cv-display-container" style="display:none;" class="printable-cv-area admin-only">
+                <div class="cv-card-wrapper">
+                    <div class="cv-header-grid">
+                        <img id="cv-show-photo" src="https://via.placeholder.com/120x140" class="cv-photo-box">
+                        <div class="cv-title">
+                            <h2 style="color:var(--primary);" class="title-display">একটিভ কিন্ডার গার্টেন</h2>
+                            <h3 style="color:#333; margin-top:5px;">জীবনবৃত্তান্ত (CURRICULUM VITAE)</h3>
+                            <p style="font-weight:bold; color:var(--secondary);" id="cv-show-designation">পদবি: -</p>
+                        </div>
+                        <div style="width:120px;"></div>
+                    </div>
+
+                    <table class="cv-table">
+                        <tr><td class="label-td">নাম (বাংলা):</td><td id="cv-show-name-bn">-</td></tr>
+                        <tr><td class="label-td">Name (English):</td><td id="cv-show-name-en">-</td></tr>
+                        <tr><td class="label-td">পদবি / Designation:</td><td id="cv-show-desig-val">-</td></tr>
+                        <tr><td class="label-td">জন্ম নিবন্ধন নম্বর:</td><td id="cv-show-birth">-</td></tr>
+                        <tr><td class="label-td">NID নম্বর:</td><td id="cv-show-nid">-</td></tr>
+                        <tr><td class="label-td">পিতার নাম (বাংলা ও ইংরেজি):</td><td id="cv-show-fname">-</td></tr>
+                        <tr><td class="label-td">পিতার NID:</td><td id="cv-show-fnid">-</td></tr>
+                        <tr><td class="label-td">মাতার নাম (বাংলা ও ইংরেজি):</td><td id="cv-show-mname">-</td></tr>
+                        <tr><td class="label-td">মাতার NID:</td><td id="cv-show-mnid">-</td></tr>
+                        <tr><td class="label-td">ধর্ম:</td><td id="cv-show-religion">-</td></tr>
+                        <tr><td class="label-td">মোবাইল নম্বর:</td><td id="cv-show-phone">-</td></tr>
+                        <tr><td class="label-td">বর্তমান ঠিকানা:</td><td id="cv-show-present-addr">-</td></tr>
+                        <tr><td class="label-td">স্থায়ী ঠিকানা:</td><td id="cv-show-perm-addr">-</td></tr>
+                        <tr>
+                            <td class="label-td">শিক্ষাগত যোগ্যতা:</td>
+                            <td id="cv-show-education" style="white-space:pre-line;">-</td>
+                        </tr>
+                    </table>
+
+                    <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-top:40px; padding:0 20px;">
+                        <div>
+                            <p>তারিখ: <span id="cv-current-date"></span></p>
+                        </div>
+                        <div style="text-align:center;">
+                            <img id="cv-show-signature" src="https://via.placeholder.com/150x50?text=Signature" class="cv-signature-img"><br>
+                            <strong>আবেদনকারী / শিক্ষকের স্বাক্ষর</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CV Specific Print & Download Buttons -->
+                <div style="margin-top:20px; display:flex; gap:10px;">
+                    <button class="btn btn-primary" onclick="window.print()"><i class="fas fa-print"></i> CV প্রিন্ট করুন</button>
+                    <button class="btn btn-success" onclick="window.print()"><i class="fas fa-download"></i> CV ডাউনলোড (PDF)</button>
+                    <button class="btn btn-danger" onclick="document.getElementById('cv-display-container').style.display='none';"><i class="fas fa-times"></i> সিভি বন্ধ করুন</button>
+                </div>
+            </div>
+
+            <div style="margin-top:20px; display:flex; gap:10px;">
+                <button class="btn btn-primary btn-print-action" onclick="window.print()"><i class="fas fa-print"></i> প্রিন্ট করুন</button>
+                <button class="btn btn-success btn-download-action" onclick="window.print()"><i class="fas fa-download"></i> ডাউনলোড (PDF)</button>
+            </div>
+        </div>
+
+        <!-- 5. Fee Waiver Section -->
+        <div id="waiver" class="tab-content">
+            <div class="section-header">
+                <h2><i class="fas fa-hand-holding-usd"></i> শ্রেণিভিত্তিক বেতন মওকুফ তথ্য</h2>
+            </div>
+
+            <div class="class-tabs">
+                <button class="class-tab-btn active" onclick="filterWaiverClass('play', this)">প্লে</button>
+                <button class="class-tab-btn" onclick="filterWaiverClass('nursery', this)">নার্সারি</button>
+                <button class="class-tab-btn" onclick="filterWaiverClass('class1', this)">প্রথম শ্রেণি</button>
+                <button class="class-tab-btn" onclick="filterWaiverClass('class2', this)">দ্বিতীয় শ্রেণি</button>
+                <button class="class-tab-btn" onclick="filterWaiverClass('class3', this)">তৃতীয় শ্রেণি</button>
+                <button class="class-tab-btn" onclick="filterWaiverClass('class4', this)">চতুর্থ শ্রেণি</button>
+                <button class="class-tab-btn" onclick="filterWaiverClass('class5', this)">পঞ্চম শ্রেণি</button>
+            </div>
+
+            <div class="word-toolbar-wrapper editor-tools">
+                <div class="toolbar-group-title"><i class="fas fa-font"></i> ফন্ট ও স্টাইল কন্ট্রোল</div>
+                <div class="word-toolbar-row">
+                    <select class="tool-select" onchange="execCmd('fontName', this.value)"><option value="SutonnyMJ">SutonnyMJ</option><option value="Kalpurush">Kalpurush</option><option value="Arial">Arial</option></select>
+                    <button class="tool-btn" onclick="execCmd('bold')"><i class="fas fa-bold"></i></button>
+                </div>
+            </div>
+
+            <div class="admin-only">
+                <div class="form-grid">
+                    <div class="form-group"><label>শিক্ষার্থীর নাম</label><input type="text" id="wv-name"></div>
+                    <div class="form-group"><label>রোল নম্বর</label><input type="text" id="wv-roll"></div>
+                    <div class="form-group"><label>মওকুফের বিবরণ / পরিমাণ (% বা টাকা)</label><input type="text" id="wv-amount"></div>
+                </div>
+                <button class="btn btn-success" onclick="addWaiver()"><i class="fas fa-plus"></i> মওকুফ তথ্য যোগ করুন</button>
+            </div>
+
+            <div class="cert-paper-wrapper" style="margin-top:20px;">
+                <div class="word-document-page page-a4 portrait" id="waiver-word-page">
+                    <div class="watermark-overlay text-wm" id="waiver-wm-layer">একটিভ কিন্ডার গার্টেন</div>
+                    <div class="document-inner-content" id="waiver-content-box" contenteditable="false" spellcheck="false">
+                        <div style="text-align:center; border-bottom:2px solid #1b5e20; padding-bottom:10px; margin-bottom:15px;">
+                            <img src="https://via.placeholder.com/70?text=Logo" class="clickable-img" style="width:70px; height:70px; object-fit:contain; border-radius:50%;" onclick="triggerImgChange(this)">
+                            <h2 style="color:#1b5e20;" class="title-display">একটিভ কিন্ডার গার্টেন</h2>
+                            <p>বেতন মওকুফ তালিকা - <span id="lbl-current-waiver-class">প্লে</span></p>
+                        </div>
+                        <div class="table-responsive">
+                            <table>
+                                <thead><tr><th>রোল</th><th>শিক্ষার্থীর নাম</th><th>মওকুফের বিবরণ</th><th class="admin-only">অ্যাকশন</th></tr></thead>
+                                <tbody id="waiver-table-body"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top:20px; display:flex; gap:10px;">
+                <button class="btn btn-primary btn-print-action" onclick="window.print()"><i class="fas fa-print"></i> প্রিন্ট করুন</button>
+                <button class="btn btn-success btn-download-action" onclick="window.print()"><i class="fas fa-download"></i> ডাউনলোড (PDF)</button>
+            </div>
+        </div>
+
+        <!-- 6. RESULTS SECTION (UPGRADED WITH CLASS TABS) -->
+        <div id="results" class="tab-content">
+            <div class="section-header">
+                <h2><i class="fas fa-file-word"></i> শ্রেণিভিত্তিক পরীক্ষার ফলাফল শীট এডিটর</h2>
+            </div>
+
+            <div class="class-tabs">
+                <button class="class-tab-btn active" onclick="filterResultClass('play', this)">প্লে</button>
+                <button class="class-tab-btn" onclick="filterResultClass('nursery', this)">নার্সারি</button>
+                <button class="class-tab-btn" onclick="filterResultClass('class1', this)">প্রথম শ্রেণি</button>
+                <button class="class-tab-btn" onclick="filterResultClass('class2', this)">দ্বিতীয় শ্রেণি</button>
+                <button class="class-tab-btn" onclick="filterResultClass('class3', this)">তৃতীয় শ্রেণি</button>
+                <button class="class-tab-btn" onclick="filterResultClass('class4', this)">চতুর্থ শ্রেণি</button>
+                <button class="class-tab-btn" onclick="filterResultClass('class5', this)">পঞ্চম শ্রেণি</button>
+            </div>
+
+            <div class="word-toolbar-wrapper editor-tools">
+                <div class="toolbar-group-title"><i class="fas fa-font"></i> ফন্ট ও টেবিল কন্ট্রোল</div>
+                <div class="word-toolbar-row" style="margin-bottom:10px;">
+                    <select class="tool-select" onchange="execCmd('fontName', this.value)"><option value="SutonnyMJ">SutonnyMJ</option><option value="Kalpurush">Kalpurush</option><option value="Arial">Arial</option></select>
+                    <select class="tool-select" onchange="execCmd('fontSize', this.value)"><option value="3">12pt</option><option value="4">14pt</option><option value="5">18pt</option></select>
+                    <button class="tool-btn" onclick="execCmd('bold')"><i class="fas fa-bold"></i></button>
+                    <button class="tool-btn" onclick="execCmd('italic')"><i class="fas fa-italic"></i></button>
+                    <label class="tool-btn"><i class="fas fa-palette"></i> কালার <input type="color" onchange="execCmd('foreColor', this.value)" style="opacity:0; width:0; height:0;"></label>
+                    <button class="tool-btn" onclick="addTableRow('res-main-table')"><i class="fas fa-plus-square"></i> নতুন সারি</button>
+                    <button class="tool-btn" onclick="deleteTableRow('res-main-table')"><i class="fas fa-minus-square"></i> সারি মুছুন</button>
+                    <button class="tool-btn" onclick="addTableColumn('res-main-table')"><i class="fas fa-plus"></i> কলাম এড</button>
+                </div>
+                <div class="word-toolbar-row">
+                    <select id="res-size" class="tool-select" onchange="updateWordPageSetup('res')"><option value="a4">A4 সাইজ</option><option value="b4">B4 সাইজ</option><option value="letter">Letter</option></select>
+                    <select id="res-orient" class="tool-select" onchange="updateWordPageSetup('res')"><option value="landscape" selected>ল্যান্ডস্কেপ</option><option value="portrait">পোট্রেট</option></select>
+                    <input type="color" id="res-bg-color" class="tool-input" value="#ffffff" onchange="updateWordPageSetup('res')">
+                    <input type="text" id="res-wm-text" class="tool-input" placeholder="ওয়াটারমার্ক" oninput="updateWatermark('res')">
+                </div>
+            </div>
+
+            <div class="cert-paper-wrapper">
+                <div class="word-document-page page-a4 landscape" id="res-word-page">
+                    <div class="watermark-overlay text-wm" id="res-wm-layer">একটিভ কিন্ডার গার্টেন</div>
+                    <div class="document-inner-content" id="res-content-box" contenteditable="false" spellcheck="false">
+                        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #1b5e20; padding-bottom:10px; margin-bottom:15px;">
+                            <img src="https://via.placeholder.com/80?text=Logo" class="clickable-img" style="width:80px; height:80px; object-fit:contain;" onclick="triggerImgChange(this)" title="লোগো বদলান">
+                            <div style="text-align:center;">
+                                <h1 style="color:#1b5e20; font-size:2.2rem; margin:0;" class="title-display">একটিভ কিন্ডার গার্টেন</h1>
+                                <p style="margin:0; font-size:1.05rem; color:#555;">ধুনট, বগুড়া | বার্ষিক পরীক্ষার ফলাফল শীট - <span id="lbl-current-result-class" style="font-weight:bold; color:#d81b60;">প্লে</span></p>
+                            </div>
+                            <img src="https://via.placeholder.com/80?text=Logo" class="clickable-img" style="width:80px; height:80px; object-fit:contain;" onclick="triggerImgChange(this)" title="লোগো বদলান">
+                        </div>
+
+                        <table class="editable-result-table" id="res-main-table">
+                            <thead>
+                                <tr><th>ছবি (Touch)</th><th>রোল</th><th>নাম</th><th>বাংলা</th><th>ইংরেজি</th><th>গণিত</th><th>বিজ্ঞান</th><th>ধর্ম</th><th>মোট</th><th>মেধা</th><th>GPA</th></tr>
+                            </thead>
+                            <tbody id="result-table-body">
+                            </tbody>
+                        </table>
+
+                        <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-top:60px; padding:0 20px;">
+                            <div><p>প্রকাশের তারিখ: ১৮/১০/২০২৬</p></div>
+                            <div style="text-align:center;"><p>signature</p><p><strong>মোছাঃ আমিনা খানম</strong></p><p style="font-size:0.85rem;">প্রধান শিক্ষক</p></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top:20px; display:flex; gap:10px;">
+                <button class="btn btn-primary btn-print-action" onclick="window.print()"><i class="fas fa-print"></i> প্রিন্ট করুন</button>
+                <button class="btn btn-success btn-download-action" onclick="window.print()"><i class="fas fa-download"></i> ডাউনলোড (PDF)</button>
+            </div>
+        </div>
+
+        <!-- 7. TESTIMONIAL SECTION -->
+        <div id="testimonial" class="tab-content">
+            <div class="section-header">
+                <h2><i class="fas fa-award"></i> MS Word প্রশংসাপত্র এডিটর</h2>
+            </div>
+            
+            <div class="word-toolbar-wrapper editor-tools">
+                <div class="toolbar-group-title"><i class="fas fa-font"></i> ফন্ট ও স্টাইল কন্ট্রোল</div>
+                <div class="word-toolbar-row">
+                    <select class="tool-select" onchange="execCmd('fontName', this.value)"><option value="SutonnyMJ">SutonnyMJ</option><option value="Kalpurush">Kalpurush</option><option value="Arial">Arial</option></select>
+                    <select class="tool-select" onchange="execCmd('fontSize', this.value)"><option value="3">12pt</option><option value="4">14pt</option><option value="5">18pt</option></select>
+                    <button class="tool-btn" onclick="execCmd('bold')"><i class="fas fa-bold"></i></button>
+                    <button class="tool-btn" onclick="execCmd('italic')"><i class="fas fa-italic"></i></button>
+                    <label class="tool-btn"><i class="fas fa-palette"></i> কালার <input type="color" onchange="execCmd('foreColor', this.value)" style="opacity:0; width:0; height:0;"></label>
+                </div>
+            </div>
+
+            <div class="cert-paper-wrapper">
+                <div class="word-document-page page-a4 portrait" id="tst-word-page">
+                    <div class="watermark-overlay text-wm" id="tst-wm-layer">একটিভ কিন্ডার গার্টেন</div>
+                    <div class="document-inner-content" id="tst-content-box" contenteditable="false" spellcheck="false">
+                        <h2 style="text-align:center; color:#d81b60; text-decoration:underline;">প্রশংসাপত্র</h2>
+                        <p style="margin-top:30px; font-size:1.2rem; text-align:justify; line-height:2.2;">
+                            এই মর্মে প্রত্যয়ন করা যাচ্ছে যে, <strong>[শিক্ষার্থীর নাম]</strong>, পিতা: <strong>[পিতার নাম]</strong>, মাতা: <strong>[মাতার নাম]</strong>। সে আমাদের প্রতিষ্ঠান হতে সফলভাবে উত্তীর্ণ হয়েছে। তার চরিত্র ও আচরণ সন্তোষজনক।
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div style="margin-top:20px; display:flex; gap:10px;">
+                <button class="btn btn-primary btn-print-action" onclick="window.print()"><i class="fas fa-print"></i> প্রিন্ট করুন</button>
+                <button class="btn btn-success btn-download-action" onclick="window.print()"><i class="fas fa-download"></i> ডাউনলোড (PDF)</button>
+            </div>
+        </div>
+
+        <!-- 8. CERTIFICATE SECTION -->
+        <div id="certificate" class="tab-content">
+            <div class="section-header">
+                <h2><i class="fas fa-certificate"></i> MS Word সনদপত্র এডিটর</h2>
+            </div>
+            
+            <div class="word-toolbar-wrapper editor-tools">
+                <div class="toolbar-group-title"><i class="fas fa-font"></i> ফন্ট ও স্টাইল কন্ট্রোল</div>
+                <div class="word-toolbar-row">
+                    <select class="tool-select" onchange="execCmd('fontName', this.value)"><option value="SutonnyMJ">SutonnyMJ</option><option value="Kalpurush">Kalpurush</option><option value="Arial">Arial</option></select>
+                    <select class="tool-select" onchange="execCmd('fontSize', this.value)"><option value="3">12pt</option><option value="4">14pt</option><option value="5">18pt</option></select>
+                    <button class="tool-btn" onclick="execCmd('bold')"><i class="fas fa-bold"></i></button>
+                    <label class="tool-btn"><i class="fas fa-palette"></i> কালার <input type="color" onchange="execCmd('foreColor', this.value)" style="opacity:0; width:0; height:0;"></label>
+                </div>
+            </div>
+
+            <div class="cert-paper-wrapper">
+                <div class="word-document-page page-a4 landscape" id="crt-word-page" style="border:10px double #1b5e20;">
+                    <div class="watermark-overlay text-wm" id="crt-wm-layer">একটিভ কিন্ডার গার্টেন</div>
+                    <div class="document-inner-content" id="crt-content-box" contenteditable="false" spellcheck="false">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                            <img src="https://via.placeholder.com/90?text=Logo" class="clickable-img" style="width:90px; height:90px; object-fit:contain;" onclick="triggerImgChange(this)" title="লোগো দিন">
+                            <div style="text-align:center;">
+                                <h1 style="color:#1b5e20; font-size:2.8rem; margin:0;" class="title-display">একটিভ কিন্ডার গার্টেন</h1>
+                                <p style="margin:0; font-size:1.1rem; color:#555;">ধুনট, বগুড়া</p>
+                                <h2 style="color:#d81b60; margin-top:10px; font-size:2.2rem;">সনদপত্র (CERTIFICATE)</h2>
+                            </div>
+                            <img src="https://via.placeholder.com/90?text=Logo" class="clickable-img" style="width:90px; height:90px; object-fit:contain;" onclick="triggerImgChange(this)" title="লোগো দিন">
+                        </div>
+
+                        <p style="font-size:1.3rem; line-height:2.4; text-align:center; margin-top:40px;">
+                            অত্যন্ত আনন্দের সাথে প্রত্যয়ন করা যাচ্ছে যে, <strong style="font-size:1.5rem; color:#1b5e20;">[শিক্ষার্থীর নাম]</strong><br>
+                            সফলতার সাথে শিক্ষা সমাপ্ত করেছে।
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div style="margin-top:20px; display:flex; gap:10px;">
+                <button class="btn btn-primary btn-print-action" onclick="window.print()"><i class="fas fa-print"></i> প্রিন্ট করুন</button>
+                <button class="btn btn-success btn-download-action" onclick="window.print()"><i class="fas fa-download"></i> ডাউনলোড (PDF)</button>
+            </div>
+        </div>
+
+        <!-- 9. SCHOLARSHIP SECTION -->
+        <div id="scholarship" class="tab-content">
+            <div class="section-header">
+                <h2><i class="fas fa-medal"></i> বৃত্তি প্রাপ্ত শিক্ষার্থী ও MS Word এডিটর</h2>
+            </div>
+
+            <div class="word-toolbar-wrapper editor-tools">
+                <div class="toolbar-group-title"><i class="fas fa-font"></i> ফন্ট ও স্টাইল কন্ট্রোল</div>
+                <div class="word-toolbar-row">
+                    <select class="tool-select" onchange="execCmd('fontName', this.value)"><option value="SutonnyMJ">SutonnyMJ</option><option value="Kalpurush">Kalpurush</option><option value="Arial">Arial</option></select>
+                    <select class="tool-select" onchange="execCmd('fontSize', this.value)"><option value="3">12pt</option><option value="4">14pt</option></select>
+                    <button class="tool-btn" onclick="execCmd('bold')"><i class="fas fa-bold"></i></button>
+                </div>
+            </div>
+
+            <div class="admin-only">
+                <div class="form-grid">
+                    <div class="form-group"><label>শিক্ষার্থীর নাম</label><input type="text" id="sch-name"></div>
+                    <div class="form-group"><label>প্রতিষ্ঠানের নাম / ক্যাটাগরি</label><input type="text" id="sch-cat"></div>
+                    <div class="form-group"><label>ছবি (Touch)</label><input type="file" id="sch-photo" accept="image/*"></div>
+                </div>
+                <button class="btn btn-success" onclick="addScholarship()"><i class="fas fa-plus"></i> বৃত্তি প্রাপ্ত শিক্ষার্থী যোগ করুন</button>
+            </div>
+
+            <div class="cert-paper-wrapper" style="margin-top:20px;">
+                <div class="word-document-page page-a4 portrait" id="sch-word-page">
+                    <div class="watermark-overlay text-wm" id="sch-wm-layer">একটিভ কিন্ডার গার্টেন</div>
+                    <div class="document-inner-content" id="sch-content-box" contenteditable="false" spellcheck="false">
+                        <div style="text-align:center; border-bottom:2px solid #1b5e20; padding-bottom:10px; margin-bottom:15px;">
+                            <img src="https://via.placeholder.com/70?text=Logo" class="clickable-img" style="width:70px; height:70px; object-fit:contain; border-radius:50%;" onclick="triggerImgChange(this)">
+                            <h2 style="color:#1b5e20;" class="title-display">একটিভ কিন্ডার গার্টেন</h2>
+                            <p>বৃত্তি প্রাপ্ত কৃতি শিক্ষার্থীদের তালিকা - ২০২৬</p>
+                        </div>
+                        <div class="table-responsive">
+                            <table>
+                                <thead><tr><th>ছবি</th><th>নাম</th><th>ক্যাটাগরি / প্রতিষ্ঠান</th><th class="admin-only">অ্যাকশন</th></tr></thead>
+                                <tbody id="scholarship-table-body"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top:20px; display:flex; gap:10px;">
+                <button class="btn btn-primary btn-print-action" onclick="window.print()"><i class="fas fa-print"></i> প্রিন্ট করুন</button>
+                <button class="btn btn-success btn-download-action" onclick="window.print()"><i class="fas fa-download"></i> ডাউনলোড (PDF)</button>
+            </div>
+        </div>
+
+        <!-- 10. ADMIN SETTINGS SECTION -->
+        <div id="settings" class="tab-content admin-only">
+            <div class="section-header">
+                <h2><i class="fas fa-cogs"></i> ওয়েবসাইট কন্ট্রোল প্যানেল ও সেটিংস</h2>
+            </div>
+
+            <div class="form-grid">
+                <div class="form-group"><label>প্রতিষ্ঠানের নাম</label><input type="text" id="cfg-title" value="একটিভ কিন্ডার গার্টেন"></div>
+                <div class="form-group"><label>প্রধান শিক্ষকের নাম</label><input type="text" id="cfg-headteacher" value="মোছাঃ আমিনা খানম"></div>
+                <div class="form-group full-width"><label>জরুরী নোটিশ</label><textarea id="cfg-notice" rows="2"></textarea></div>
+                <div class="form-group full-width"><label>প্রধান শিক্ষকের বাণী</label><textarea id="cfg-headspeech" rows="3"></textarea></div>
+                <div class="form-group full-width"><label>বিদ্যালয় পরিচিতি</label><textarea id="cfg-about" rows="3"></textarea></div>
+                
+                <div class="form-group"><label>লোগো পরিবর্তন</label><input type="file" id="logo-input" accept="image/*" onchange="uploadLogo(this)"></div>
+                <div class="form-group"><label>ব্যানার পরিবর্তন</label><input type="file" id="banner-input" accept="image/*" onchange="uploadBanner(this)"></div>
+                
+                <div class="form-group"><label>হোয়াটসঅ্যাপ নম্বর (যেমন: 8801700000000)</label><input type="text" id="cfg-whatsapp" placeholder="88017XXXXXXXX"></div>
+                <div class="form-group"><label>ফেসবুক পেজ লিংক</label><input type="text" id="cfg-facebook" placeholder="https://facebook.com/yourpage"></div>
+                <div class="form-group"><label>মেসেঞ্জার লিংক</label><input type="text" id="cfg-messenger" placeholder="https://m.me/yourpage"></div>
+
+                <div class="form-group full-width" style="background: #e8f5e9; padding: 15px; border-radius: 6px; border: 1px solid #c8e6c9; display: flex; flex-direction: column; gap: 10px;">
+                    <h4 style="color: var(--primary);"><i class="fas fa-user-lock"></i> পাবলিক অ্যাকসেস ও পারমিশন সেটিংস</h4>
+                    <label style="cursor: pointer; display: flex; align-items: center; gap: 10px; font-weight: normal;">
+                        <input type="checkbox" id="cfg-public-edit" onchange="togglePublicEditing(this)" style="width: 18px; height: 18px;"> 
+                        <span>১) সবার জন্য <strong>এডিটিং</strong> সুবিধা উন্মুক্ত করুন (Public Editing Mode)</span>
+                    </label>
+                    <label style="cursor: pointer; display: flex; align-items: center; gap: 10px; font-weight: normal;">
+                        <input type="checkbox" id="cfg-public-print" onchange="togglePublicPrint(this)" style="width: 18px; height: 18px;"> 
+                        <span>২) সবার জন্য <strong>প্রিন্ট করুন</strong> বাটন উন্মুক্ত করুন (Public Print Mode)</span>
+                    </label>
+                    <label style="cursor: pointer; display: flex; align-items: center; gap: 10px; font-weight: normal;">
+                        <input type="checkbox" id="cfg-public-download" onchange="togglePublicDownload(this)" style="width: 18px; height: 18px;"> 
+                        <span>৩) সবার জন্য <strong>ডাউনলোড (PDF)</strong> বাটন উন্মুক্ত করুন (Public Download Mode)</span>
+                    </label>
+                </div>
+            </div>
+
+            <h3><i class="fas fa-eye"></i> মেনুবার প্রদর্শন বা লুকানোর নিয়ন্ত্রণ (Menu Visibility Toggles)</h3>
+            <p style="font-size: 0.9rem; color: #666; margin-bottom: 15px;">যে অপশনগুলো টিক চিহ্ন তুলে দেবেন, সাধারণ ব্যবহারকারীদের জন্য সেগুলো মেনু থেকে লুকিয়ে যাবে:</p>
+            
+            <div class="checkbox-group" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; background: #fff; padding: 15px; border-radius: 8px; border: 1px solid #ddd; margin-bottom: 20px;">
+                <label><input type="checkbox" id="menu-home" checked onchange="saveMenuVisibility()"> হোম</label>
+                <label><input type="checkbox" id="menu-students" checked onchange="saveMenuVisibility()"> শিক্ষার্থী তথ্য</label>
+                <label><input type="checkbox" id="menu-admission" checked onchange="saveMenuVisibility()"> ভর্তির আবেদন</label>
+                <label><input type="checkbox" id="menu-teacher-apply" checked onchange="saveMenuVisibility()"> নিয়োগের আবেদন</label>
+                <label><input type="checkbox" id="menu-teachers" checked onchange="saveMenuVisibility()"> শিক্ষক ও কর্মচারী</label>
+                <label><input type="checkbox" id="menu-waiver" checked onchange="saveMenuVisibility()"> বেতন মওকুফ</label>
+                <label><input type="checkbox" id="menu-results" checked onchange="saveMenuVisibility()"> ফলাফল শীট</label>
+                <label><input type="checkbox" id="menu-testimonial" checked onchange="saveMenuVisibility()"> প্রশংসাপত্র</label>
+                <label><input type="checkbox" id="menu-certificate" checked onchange="saveMenuVisibility()"> সনদপত্র</label>
+                <label><input type="checkbox" id="menu-scholarship" checked onchange="saveMenuVisibility()"> বৃত্তি সংক্রান্ত</label>
+            </div>
+
+            <button class="btn btn-success" onclick="saveSettings()"><i class="fas fa-save"></i> সকল সেটিংস সংরক্ষণ করুন</button>
+        </div>
+
+    </div>
+
+    <!-- Login Modal -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <h3><i class="fas fa-lock"></i> এডমিন লগইন</h3>
+            <div class="form-group" style="margin-top:15px;">
+                <label>পাসওয়ার্ড</label>
+                <input type="password" id="admin-password" placeholder="পাসওয়ার্ড লিখুন">
+            </div>
+            <div style="margin-top:20px; display:flex; gap:10px;">
+                <button class="btn btn-success" onclick="login()">লগইন</button>
+                <button class="btn btn-danger" onclick="closeLoginModal()">বন্ধ করুন</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let isAdmin = false;
+        let currentStudentClass = 'play';
+        let currentWaiverClass = 'play';
+        let currentResultClass = 'play';
+        
+        let adminPasswordSaved = localStorage.getItem('adminPasswordSaved') || 'Mur90@SGC26';
+        let activeTargetImageElement = null;
+
+        let studentChartInstance = null;
+        let performanceChartInstance = null;
+
+        function compressAndConvertImage(file, maxWidth, maxHeight, callback) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    let width = img.width;
+                    let height = img.height;
+                    if (width > height) {
+                        if (width > maxWidth) { height *= maxWidth / width; width = maxWidth; }
+                    } else {
+                        if (height > maxHeight) { width *= maxHeight / height; height = maxHeight; }
+                    }
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+                    callback(canvas.toDataURL('image/jpeg', 0.8));
+                };
+                img.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function triggerImgChange(imgEl) {
+            if (!isAdmin && !siteSettings.publicEditable) {
+                alert('দুঃখিত! ছবি পরিবর্তনের অনুমতি শুধুমাত্র এডমিনের রয়েছে।');
+                return;
+            }
+            activeTargetImageElement = imgEl;
+            document.getElementById('universal-camera-picker').click();
+        }
+
+        document.getElementById('universal-camera-picker').addEventListener('change', function() {
+            if (this.files && this.files[0] && activeTargetImageElement) {
+                compressAndConvertImage(this.files[0], 400, 400, function(base64Data) {
+                    activeTargetImageElement.src = base64Data;
+                });
+            }
+        });
+
+        function execCmd(command, value = null) {
+            if (!isAdmin && !siteSettings.publicEditable) { alert('অনুমতি নেই!'); return; }
+            document.execCommand(command, false, value);
+        }
+
+        function addTableRow(tableId) {
+            if (!isAdmin && !siteSettings.publicEditable) { alert('অনুমতি নেই!'); return; }
+            const table = document.getElementById(tableId);
+            const tbody = table.getElementsByTagName('tbody')[0];
+            const colCount = table.rows[0].cells.length;
+            const newRow = tbody.insertRow(-1);
+            for (let i = 0; i < colCount; i++) {
+                const cell = newRow.insertCell(i);
+                if (i === 0) {
+                    cell.innerHTML = '<img src="https://via.placeholder.com/40?text=Photo" class="clickable-img" style="width:40px; height:40px; border-radius:50%; object-fit:cover;" onclick="triggerImgChange(this)">';
+                } else {
+                    cell.contentEditable = "true";
+                    cell.innerText = '-';
+                }
+            }
+        }
+
+        function deleteTableRow(tableId) {
+            if (!isAdmin && !siteSettings.publicEditable) { alert('অনুমতি নেই!'); return; }
+            const table = document.getElementById(tableId);
+            if (table.rows.length > 2) table.deleteRow(-1);
+            else alert("কমপক্ষে একটি রো থাকতে হবে!");
+        }
+
+        function addTableColumn(tableId) {
+            if (!isAdmin && !siteSettings.publicEditable) { alert('অনুমতি নেই!'); return; }
+            const table = document.getElementById(tableId);
+            const colName = prompt("কলামের নাম লিখুন:", "বিষয়");
+            if (!colName) return;
+            for (let i = 0; i < table.rows.length; i++) {
+                if (i === 0) {
+                    const th = document.createElement('th');
+                    th.innerText = colName;
+                    table.rows[i].appendChild(th);
+                } else {
+                    const cell = table.rows[i].insertCell(-1);
+                    cell.contentEditable = "true";
+                    cell.innerText = '০';
+                }
+            }
+        }
+
+        function updateWordPageSetup(prefix) {
+            const size = document.getElementById(prefix + '-size').value;
+            const orient = document.getElementById(prefix + '-orient').value;
+            const bgColor = document.getElementById(prefix + '-bg-color').value;
+            const page = document.getElementById(prefix + '-word-page');
+            page.className = `word-document-page page-${size} ${orient}`;
+            page.style.backgroundColor = bgColor;
+        }
+
+        function updateWatermark(prefix) {
+            const text = document.getElementById(prefix + '-wm-text').value;
+            const layer = document.getElementById(prefix + '-wm-layer');
+            layer.className = 'watermark-overlay text-wm';
+            layer.innerText = text || 'একটিভ কিন্ডার গার্টেন';
+        }
+
+        function openLoginModal() { document.getElementById('admin-password').value = ''; document.getElementById('loginModal').style.display = 'flex'; }
+        function closeLoginModal() { document.getElementById('loginModal').style.display = 'none'; }
+
+        function login() {
+            const pass = document.getElementById('admin-password').value;
+            if (pass === adminPasswordSaved) {
+                isAdmin = true;
+                document.body.classList.add('is-admin');
+                document.getElementById('user-status-text').innerHTML = '<i class="fas fa-user-check"></i> স্বাগতম এডমিন (পূর্ণ নিয়ন্ত্রণ)';
+                document.getElementById('login-btn').style.display = 'none';
+                document.getElementById('logout-btn').style.display = 'inline-block';
+                closeLoginModal();
+                updatePermissions();
+                renderAll();
+            } else { alert('ভুল পাসওয়ার্ড!'); }
+        }
+
+        function logout() {
+            isAdmin = false;
+            document.body.classList.remove('is-admin');
+            document.getElementById('user-status-text').innerHTML = '<i class="fas fa-user-shield"></i> আপনি বর্তমানে অতিথি হিসেবে আছেন (ভিউ মোড)';
+            document.getElementById('login-btn').style.display = 'inline-block';
+            document.getElementById('logout-btn').style.display = 'none';
+            document.getElementById('cv-display-container').style.display = 'none';
+            switchTab('home', document.querySelector('.nav-links a'));
+            updatePermissions();
+            renderAll();
+        }
+
+        let siteSettings = JSON.parse(localStorage.getItem('siteSettings')) || {
+            title: 'একটিভ কিন্ডার গার্টেন',
+            headteacher: 'মোছাঃ আমিনা খানম',
+            notice: 'আমাদের প্রতিষ্ঠানের শিক্ষার্থী, শিক্ষক এবং শিক্ষামূলক যাবতীয় তথ্যের জন্য এই প্যানেলটি ব্যবহার করুন।',
+            headspeech: 'একটিভ কিন্ডার গার্টেন সুশিক্ষা ও সুশৃঙ্খল পরিবেশ বজায় রেখে প্রতিটি শিশুর মেধাবিকাশে কাজ করে চলেছে। আমাদের দক্ষ শিক্ষকমণ্ডলী ও আধুনিক শিক্ষাদান পদ্ধতি শিক্ষার্থীদের উজ্জ্বল ভবিষ্যৎ গঠনে প্রতিশ্রুতিবদ্ধ।',
+            schoolAbout: 'একটিভ কিন্ডার গার্টেন ধুনট, বগুড়ায় অবস্থিত একটি স্বনামধন্য শিক্ষা প্রতিষ্ঠান। আমরা শিশুদের প্রাথমিক শিক্ষা থেকে শুরু করে নৈতিক শিক্ষা প্রদান করে দক্ষ ও সৎ নাগরিক হিসেবে গড়ে তুলতে নিরলস কাজ করে যাচ্ছি।',
+            logo: 'https://via.placeholder.com/120?text=Logo',
+            banner: 'https://via.placeholder.com/1200x400?text=Active+Kindergarten+Banner',
+            whatsapp: '8801700000000',
+            facebook: 'https://facebook.com',
+            messenger: 'https://m.me',
+            publicEditable: false,
+            publicPrintable: false,
+            publicDownloadable: false,
+            menuVisibility: { home: true, students: true, admission: true, teacherApply: true, teachers: true, waiver: true, results: true, testimonial: true, certificate: true, scholarship: true }
+        };
+
+        let galleryPhotos = JSON.parse(localStorage.getItem('galleryPhotos')) || [];
+        let studentsData = JSON.parse(localStorage.getItem('studentsData')) || { play: [], nursery: [], class1: [], class2: [], class3: [], class4: [], class5: [] };
+        let teachersData = JSON.parse(localStorage.getItem('teachersData')) || [];
+        let waiverData = JSON.parse(localStorage.getItem('waiverData')) || { play: [], nursery: [], class1: [], class2: [], class3: [], class4: [], class5: [] };
+        let resultsData = JSON.parse(localStorage.getItem('resultsData')) || { 
+            play: [{ photo: 'https://via.placeholder.com/40', roll: '১০১', name: 'আব্দুল্লাহ', bn: '৮৫', en: '৮০', math: '৯০', sci: '৮৮', rel: '৯৫', total: '৪৩৮', merit: '১ম', gpa: '৫.০০' }], 
+            nursery: [], class1: [], class2: [], class3: [], class4: [], class5: [] 
+        };
+        let scholarshipData = JSON.parse(localStorage.getItem('scholarshipData')) || [];
+
+        function saveData() {
+            localStorage.setItem('siteSettings', JSON.stringify(siteSettings));
+            localStorage.setItem('galleryPhotos', JSON.stringify(galleryPhotos));
+            localStorage.setItem('studentsData', JSON.stringify(studentsData));
+            localStorage.setItem('teachersData', JSON.stringify(teachersData));
+            localStorage.setItem('waiverData', JSON.stringify(waiverData));
+            localStorage.setItem('resultsData', JSON.stringify(resultsData));
+            localStorage.setItem('scholarshipData', JSON.stringify(scholarshipData));
+        }
+
+        function updatePermissions() {
+            const canEdit = isAdmin || siteSettings.publicEditable;
+            if (canEdit) document.body.classList.add('public-editable');
+            else document.body.classList.remove('public-editable');
+
+            if (isAdmin || siteSettings.publicPrintable) document.body.classList.add('public-printable');
+            else document.body.classList.remove('public-printable');
+
+            if (isAdmin || siteSettings.publicDownloadable) document.body.classList.add('public-downloadable');
+            else document.body.classList.remove('public-downloadable');
+
+            document.getElementById('student-content-box').contentEditable = canEdit ? "true" : "false";
+            document.getElementById('adm-content-box').contentEditable = canEdit ? "true" : "false";
+            document.getElementById('waiver-content-box').contentEditable = canEdit ? "true" : "false";
+            document.getElementById('res-content-box').contentEditable = canEdit ? "true" : "false";
+            document.getElementById('tst-content-box').contentEditable = canEdit ? "true" : "false";
+            document.getElementById('crt-content-box').contentEditable = canEdit ? "true" : "false";
+            document.getElementById('sch-content-box').contentEditable = canEdit ? "true" : "false";
+        }
+
+        function togglePublicEditing(checkbox) {
+            siteSettings.publicEditable = checkbox.checked;
+            saveData();
+            updatePermissions();
+        }
+
+        function togglePublicPrint(checkbox) {
+            siteSettings.publicPrintable = checkbox.checked;
+            saveData();
+            updatePermissions();
+        }
+
+        function togglePublicDownload(checkbox) {
+            siteSettings.publicDownloadable = checkbox.checked;
+            saveData();
+            updatePermissions();
+        }
+
+        function saveMenuVisibility() {
+            siteSettings.menuVisibility = {
+                home: document.getElementById('menu-home').checked,
+                students: document.getElementById('menu-students').checked,
+                admission: document.getElementById('menu-admission').checked,
+                teacherApply: document.getElementById('menu-teacher-apply').checked,
+                teachers: document.getElementById('menu-teachers').checked,
+                waiver: document.getElementById('menu-waiver').checked,
+                results: document.getElementById('menu-results').checked,
+                testimonial: document.getElementById('menu-testimonial').checked,
+                certificate: document.getElementById('menu-certificate').checked,
+                scholarship: document.getElementById('menu-scholarship').checked
+            };
+            saveData();
+            applyMenuVisibility();
+        }
+
+        function applyMenuVisibility() {
+            const mv = siteSettings.menuVisibility || {};
+            const keyMap = { home: 'home', students: 'students', admission: 'admission', teacherApply: 'teacher-apply', teachers: 'teachers', waiver: 'waiver', results: 'results', testimonial: 'testimonial', certificate: 'certificate', scholarship: 'scholarship' };
+            
+            for (let key in keyMap) {
+                const el = document.getElementById('nav-' + keyMap[key]);
+                if (el) {
+                    el.style.display = mv[key] !== false ? 'inline-block' : 'none';
+                }
+            }
+            if(document.getElementById('menu-home')) {
+                document.getElementById('menu-home').checked = mv.home !== false;
+                document.getElementById('menu-students').checked = mv.students !== false;
+                document.getElementById('menu-admission').checked = mv.admission !== false;
+                document.getElementById('menu-teacher-apply').checked = mv.teacherApply !== false;
+                document.getElementById('menu-teachers').checked = mv.teachers !== false;
+                document.getElementById('menu-waiver').checked = mv.waiver !== false;
+                document.getElementById('menu-results').checked = mv.results !== false;
+                document.getElementById('menu-testimonial').checked = mv.testimonial !== false;
+                document.getElementById('menu-certificate').checked = mv.certificate !== false;
+                document.getElementById('menu-scholarship').checked = mv.scholarship !== false;
+            }
+        }
+
+        function uploadLogo(input) {
+            if (input.files && input.files[0]) {
+                compressAndConvertImage(input.files[0], 300, 300, function(b64) {
+                    siteSettings.logo = b64; saveData(); applySettings(); alert('লোগো আপডেট হয়েছে!');
+                });
+            }
+        }
+
+        function uploadBanner(input) {
+            if (input.files && input.files[0]) {
+                compressAndConvertImage(input.files[0], 1200, 500, function(b64) {
+                    siteSettings.banner = b64; saveData(); applySettings(); alert('ব্যানার আপডেট হয়েছে!');
+                });
+            }
+        }
+
+        function switchTab(tabId, element) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.nav-links a').forEach(link => link.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            if(element) element.classList.add('active');
+        }
+
+        function applySettings() {
+            document.querySelectorAll('.title-display').forEach(el => el.innerText = siteSettings.title);
+            document.getElementById('site-title').innerText = siteSettings.title;
+            document.getElementById('site-headteacher').innerText = 'প্রধান শিক্ষক: ' + siteSettings.headteacher;
+            document.getElementById('home-headteacher-name').innerText = siteSettings.headteacher;
+            document.getElementById('site-notice').innerText = siteSettings.notice;
+            document.getElementById('home-headteacher-speech').innerText = siteSettings.headspeech || 'একটিভ কিন্ডার গার্টেন সুশিক্ষা ও সুশৃঙ্খল পরিবেশ বজায় রেখে প্রতিটি শিশুর মেধাবিকাশে কাজ করে চলেছে।';
+            document.getElementById('home-school-about').innerText = siteSettings.schoolAbout || 'একটিভ কিন্ডার গার্টেন ধুনট, বগুড়ায় অবস্থিত একটি স্বনামধন্য শিক্ষা প্রতিষ্ঠান।';
+
+            if(siteSettings.logo) document.getElementById('school-logo').src = siteSettings.logo;
+            if(siteSettings.banner) document.getElementById('home-banner-img').src = siteSettings.banner;
+            
+            document.getElementById('link-whatsapp').href = `https://wa.me/${siteSettings.whatsapp || ''}`;
+            document.getElementById('link-facebook').href = siteSettings.facebook || '#';
+            document.getElementById('link-messenger').href = siteSettings.messenger || '#';
+
+            document.getElementById('cfg-whatsapp').value = siteSettings.whatsapp || '';
+            document.getElementById('cfg-facebook').value = siteSettings.facebook || '';
+            document.getElementById('cfg-messenger').value = siteSettings.messenger || '';
+            document.getElementById('cfg-headspeech').value = siteSettings.headspeech || '';
+            document.getElementById('cfg-about').value = siteSettings.schoolAbout || '';
+
+            document.getElementById('cfg-public-edit').checked = !!siteSettings.publicEditable;
+            document.getElementById('cfg-public-print').checked = !!siteSettings.publicPrintable;
+            document.getElementById('cfg-public-download').checked = !!siteSettings.publicDownloadable;
+
+            applyMenuVisibility();
+            updateSummaryAndCharts();
+        }
+
+        function saveSettings() {
+            siteSettings.title = document.getElementById('cfg-title').value;
+            siteSettings.headteacher = document.getElementById('cfg-headteacher').value;
+            siteSettings.notice = document.getElementById('cfg-notice').value;
+            siteSettings.headspeech = document.getElementById('cfg-headspeech').value;
+            siteSettings.schoolAbout = document.getElementById('cfg-about').value;
+            siteSettings.whatsapp = document.getElementById('cfg-whatsapp').value;
+            siteSettings.facebook = document.getElementById('cfg-facebook').value;
+            siteSettings.messenger = document.getElementById('cfg-messenger').value;
+            siteSettings.publicEditable = document.getElementById('cfg-public-edit').checked;
+            siteSettings.publicPrintable = document.getElementById('cfg-public-print').checked;
+            siteSettings.publicDownloadable = document.getElementById('cfg-public-download').checked;
+            saveMenuVisibility();
+            saveData(); 
+            applySettings(); 
+            updatePermissions();
+            alert('সকল সেটিংস সফলভাবে সংরক্ষিত হয়েছে!');
+        }
+
+        function updateSummaryAndCharts() {
+            let totalSt = 0;
+            let classCounts = [0, 0, 0, 0, 0, 0, 0];
+            const classKeys = ['play', 'nursery', 'class1', 'class2', 'class3', 'class4', 'class5'];
+
+            classKeys.forEach((key, idx) => {
+                const count = (studentsData[key] || []).length;
+                classCounts[idx] = count;
+                totalSt += count;
+            });
+
+            document.getElementById('stat-total-students').innerText = totalSt;
+            document.getElementById('stat-total-teachers').innerText = teachersData.length;
+            document.getElementById('stat-total-scholarship').innerText = scholarshipData.length;
+
+            const ctx1 = document.getElementById('studentClassChart').getContext('2d');
+            if (studentChartInstance) studentChartInstance.destroy();
+            studentChartInstance = new Chart(ctx1, {
+                type: 'bar',
+                data: {
+                    labels: ['প্লে', 'নার্সারি', '১ম', '২য়', '৩য়', '৪র্থ', '৫ম'],
+                    datasets: [{
+                        label: 'শিক্ষার্থী সংখ্যা',
+                        data: classCounts,
+                        backgroundColor: '#2e7d32',
+                        borderRadius: 5
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
+                }
+            });
+
+            const ctx2 = document.getElementById('performanceChart').getContext('2d');
+            if (performanceChartInstance) performanceChartInstance.destroy();
+            performanceChartInstance = new Chart(ctx2, {
+                type: 'doughnut',
+                data: {
+                    labels: ['গড় উপস্থিতি %', 'পাসের হার %', 'অসাধারণ পারফরম্যান্স'],
+                    datasets: [{
+                        data: [95, 98, 85],
+                        backgroundColor: ['#4caf50', '#ff9800', '#1976d2']
+                    }]
+                },
+                options: { responsive: true }
+            });
+        }
+
+        /* Student Class Filtering & Rendering */
+        function filterStudentClass(cls, btn) {
+            currentStudentClass = cls;
+            document.querySelectorAll('#students .class-tab-btn').forEach(b => b.classList.remove('active'));
+            if(btn) btn.classList.add('active');
+            const banglaClassNames = { play: 'প্লে', nursery: 'নার্সারি', class1: 'প্রথম শ্রেণি', class2: 'দ্বিতীয় শ্রেণি', class3: 'তৃতীয় শ্রেণি', class4: 'চতুর্থ শ্রেণি', class5: 'পঞ্চম শ্রেণি' };
+            document.getElementById('lbl-current-student-class').innerText = banglaClassNames[cls];
+            renderStudents();
+        }
+
+        function addStudent() {
+            const name = document.getElementById('st-name').value;
+            const roll = document.getElementById('st-roll').value;
+            if(!name || !roll) { alert('নাম ও রোল দিন'); return; }
+            const item = { name, roll, guardian: document.getElementById('st-guardian').value, phone: document.getElementById('st-phone').value, photo: 'https://via.placeholder.com/50' };
+            const photoIn = document.getElementById('st-photo');
+            if(photoIn.files[0]) {
+                compressAndConvertImage(photoIn.files[0], 200, 200, function(b64){ item.photo = b64; studentsData[currentStudentClass].push(item); saveData(); renderStudents(); updateSummaryAndCharts(); });
+            } else { studentsData[currentStudentClass].push(item); saveData(); renderStudents(); updateSummaryAndCharts(); }
+            document.getElementById('st-name').value = '';
+            document.getElementById('st-roll').value = '';
+            document.getElementById('st-guardian').value = '';
+            document.getElementById('st-phone').value = '';
+            photoIn.value = '';
+        }
+
+        function renderStudents() {
+            const tbody = document.getElementById('student-table-body');
+            tbody.innerHTML = '';
+            (studentsData[currentStudentClass] || []).forEach((st, idx) => {
+                tbody.innerHTML += `<tr><td><img src="${st.photo}" class="user-photo clickable-img" onclick="triggerImgChange(this)"></td><td>${st.roll}</td><td>${st.name}</td><td>${st.guardian}</td><td>${st.phone}</td><td class="admin-only"><button class="btn btn-danger" onclick="studentsData[currentStudentClass].splice(${idx},1); saveData(); renderStudents(); updateSummaryAndCharts();">ডিলিট</button></td></tr>`;
+            });
+        }
+
+        /* Waiver Class Filtering & Rendering */
+        function filterWaiverClass(cls, btn) {
+            currentWaiverClass = cls;
+            document.querySelectorAll('#waiver .class-tab-btn').forEach(b => b.classList.remove('active'));
+            if(btn) btn.classList.add('active');
+            const banglaClassDisplay = { play: 'প্লে', nursery: 'নার্সারি', class1: 'প্রথম শ্রেণি', class2: 'দ্বিতীয় শ্রেণি', class3: 'তৃতীয় শ্রেণি', class4: 'চতুর্থ শ্রেণি', class5: 'পঞ্চম শ্রেণি' };
+            document.getElementById('lbl-current-waiver-class').innerText = banglaClassDisplay[cls];
+            renderWaiver();
+        }
+
+        function addWaiver() {
+            const name = document.getElementById('wv-name').value;
+            const roll = document.getElementById('wv-roll').value;
+            const amount = document.getElementById('wv-amount').value;
+            if(!name) { alert('শিক্ষার্থীর নাম লিখুন'); return; }
+            waiverData[currentWaiverClass].push({ name, roll, amount });
+            saveData();
+            renderWaiver();
+            document.getElementById('wv-name').value = '';
+            document.getElementById('wv-roll').value = '';
+            document.getElementById('wv-amount').value = '';
+        }
+
+        function renderWaiver() {
+            const tbody = document.getElementById('waiver-table-body');
+            tbody.innerHTML = '';
+            (waiverData[currentWaiverClass] || []).forEach((wv, idx) => {
+                tbody.innerHTML += `<tr><td>${wv.roll || '-'}</td><td>${wv.name}</td><td>${wv.amount}</td><td class="admin-only"><button class="btn btn-danger" onclick="waiverData[currentWaiverClass].splice(${idx},1); saveData(); renderWaiver();">ডিলিট</button></td></tr>`;
+            });
+        }
+
+        /* RESULT CLASS FILTERING & RENDERING */
+        function filterResultClass(cls, btn) {
+            currentResultClass = cls;
+            document.querySelectorAll('#results .class-tab-btn').forEach(b => b.classList.remove('active'));
+            if(btn) btn.classList.add('active');
+            const banglaClassDisplay = { play: 'প্লে', nursery: 'নার্সারি', class1: 'প্রথম শ্রেণি', class2: 'দ্বিতীয় শ্রেণি', class3: 'তৃতীয় শ্রেণি', class4: 'চতুর্থ শ্রেণি', class5: 'পঞ্চম শ্রেণি' };
+            document.getElementById('lbl-current-result-class').innerText = banglaClassDisplay[cls];
+            renderResults();
+        }
+
+        function renderResults() {
+            const tbody = document.getElementById('result-table-body');
+            tbody.innerHTML = '';
+            const list = resultsData[currentResultClass] || [];
+            if(list.length === 0) {
+                tbody.innerHTML = `<tr><td class="clickable-img"><img src="https://via.placeholder.com/40" style="width:40px; height:40px; border-radius:50%;" onclick="triggerImgChange(this)"></td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>`;
+            } else {
+                list.forEach((res) => {
+                    tbody.innerHTML += `<tr><td><img src="${res.photo || 'https://via.placeholder.com/40'}" class="clickable-img" style="width:40px; height:40px; border-radius:50%; object-fit:cover;" onclick="triggerImgChange(this)"></td><td>${res.roll}</td><td>${res.name}</td><td>${res.bn}</td><td>${res.en}</td><td>${res.math}</td><td>${res.sci}</td><td>${res.rel}</td><td>${res.total}</td><td>${res.merit}</td><td>${res.gpa}</td></tr>`;
+                });
+            }
+        }
+
+        /* FULL TEACHER & STAFF MANAGEMENT WITH CV GENERATION */
+        function addTeacherFull() {
+            const nameBn = document.getElementById('tc-name-bn').value;
+            const nameEn = document.getElementById('tc-name-en').value;
+            const designation = document.getElementById('tc-designation').value;
+            const phone = document.getElementById('tc-phone').value;
+
+            if(!nameBn || !designation || !phone) {
+                alert('শিক্ষকের নাম (বাংলা), পদবি এবং মোবাইল নম্বর আবশ্যক!');
+                return;
+            }
+
+            const teacherObj = {
+                id: Date.now(),
+                nameBn: nameBn,
+                nameEn: nameEn || nameBn,
+                designation: designation,
+                birthNo: document.getElementById('tc-birth-no').value || '-',
+                nid: document.getElementById('tc-nid').value || '-',
+                fnameBn: document.getElementById('tc-fname-bn').value || '-',
+                fnameEn: document.getElementById('tc-fname-en').value || '-',
+                fnid: document.getElementById('tc-fnid').value || '-',
+                mnameBn: document.getElementById('tc-mname-bn').value || '-',
+                mnameEn: document.getElementById('tc-mname-en').value || '-',
+                mnid: document.getElementById('tc-mnid').value || '-',
+                religion: document.getElementById('tc-religion').value || 'ইসলাম',
+                phone: phone,
+                presentAddr: document.getElementById('tc-present-addr').value || '-',
+                permAddr: document.getElementById('tc-perm-addr').value || '-',
+                education: document.getElementById('tc-education').value || '-',
+                photo: 'https://via.placeholder.com/120x140?text=Photo',
+                signature: 'https://via.placeholder.com/150x50?text=Signature'
+            };
+
+            const photoInput = document.getElementById('tc-photo');
+            const sigInput = document.getElementById('tc-signature');
+
+            const processSignature = function() {
+                if(sigInput.files[0]) {
+                    compressAndConvertImage(sigInput.files[0], 300, 100, function(sigB64) {
+                        teacherObj.signature = sigB64;
+                        teachersData.push(teacherObj);
+                        saveData();
+                        renderTeachers();
+                        updateSummaryAndCharts();
+                        clearTeacherForm();
+                    });
+                } else {
+                    teachersData.push(teacherObj);
+                    saveData();
+                    renderTeachers();
+                    updateSummaryAndCharts();
+                    clearTeacherForm();
+                }
+            };
+
+            if(photoInput.files[0]) {
+                compressAndConvertImage(photoInput.files[0], 300, 350, function(photoB64) {
+                    teacherObj.photo = photoB64;
+                    processSignature();
+                });
+            } else {
+                processSignature();
+            }
+        }
+
+        function clearTeacherForm() {
+            document.getElementById('tc-name-bn').value = '';
+            document.getElementById('tc-name-en').value = '';
+            document.getElementById('tc-designation').value = '';
+            document.getElementById('tc-birth-no').value = '';
+            document.getElementById('tc-nid').value = '';
+            document.getElementById('tc-fname-bn').value = '';
+            document.getElementById('tc-fname-en').value = '';
+            document.getElementById('tc-fnid').value = '';
+            document.getElementById('tc-mname-bn').value = '';
+            document.getElementById('tc-mname-en').value = '';
+            document.getElementById('tc-mnid').value = '';
+            document.getElementById('tc-phone').value = '';
+            document.getElementById('tc-present-addr').value = '';
+            document.getElementById('tc-perm-addr').value = '';
+            document.getElementById('tc-education').value = '';
+            document.getElementById('tc-photo').value = '';
+            document.getElementById('tc-signature').value = '';
+            alert('শিক্ষক/কর্মচারী তথ্য সফলভাবে সংরক্ষণ করা হয়েছে!');
+        }
+
+        function renderTeachers() {
+            const tbody = document.getElementById('teacher-table-body');
+            tbody.innerHTML = '';
+            teachersData.forEach((tc, idx) => {
+                const nameDisplay = `${tc.nameBn || tc.name} ${tc.nameEn ? '(' + tc.nameEn + ')' : ''}`;
+                tbody.innerHTML += `
+                    <tr>
+                        <td><img src="${tc.photo || 'https://via.placeholder.com/50'}" class="user-photo clickable-img" onclick="triggerImgChange(this)"></td>
+                        <td>${nameDisplay}</td>
+                        <td>${tc.designation || '-'}</td>
+                        <td>${tc.phone || '-'}</td>
+                        <td class="cv-view-btn"><button class="btn btn-primary" style="padding:4px 10px; font-size:0.85rem;" onclick="viewTeacherCV(${idx})"><i class="fas fa-id-card"></i> CV দেখুন</button></td>
+                        <td class="admin-only"><button class="btn btn-danger" onclick="teachersData.splice(${idx},1); saveData(); renderTeachers(); updateSummaryAndCharts();">ডিলিট</button></td>
+                    </tr>
+                `;
+            });
+        }
+
+        function viewTeacherCV(index) {
+            if(!isAdmin) {
+                alert('দুঃখিত! শিক্ষকদের সিভি দেখার অনুমতি শুধুমাত্র এডমিনের রয়েছে।');
+                return;
+            }
+            const tc = teachersData[index];
+            if(!tc) return;
+
+            document.getElementById('cv-show-photo').src = tc.photo || 'https://via.placeholder.com/120x140';
+            document.getElementById('cv-show-signature').src = tc.signature || 'https://via.placeholder.com/150x50?text=Signature';
+            
+            document.getElementById('cv-show-designation').innerText = 'পদবি: ' + (tc.designation || '-');
+            document.getElementById('cv-show-name-bn').innerText = tc.nameBn || tc.name || '-';
+            document.getElementById('cv-show-name-en').innerText = tc.nameEn || '-';
+            document.getElementById('cv-show-desig-val').innerText = tc.designation || '-';
+            document.getElementById('cv-show-birth').innerText = tc.birthNo || '-';
+            document.getElementById('cv-show-nid').innerText = tc.nid || '-';
+            document.getElementById('cv-show-fname').innerText = `${tc.fnameBn || '-'} / ${tc.fnameEn || '-'}`;
+            document.getElementById('cv-show-fnid').innerText = tc.fnid || '-';
+            document.getElementById('cv-show-mname').innerText = `${tc.mnameBn || '-'} / ${tc.mnameEn || '-'}`;
+            document.getElementById('cv-show-mnid').innerText = tc.mnid || '-';
+            document.getElementById('cv-show-religion').innerText = tc.religion || '-';
+            document.getElementById('cv-show-phone').innerText = tc.phone || '-';
+            document.getElementById('cv-show-present-addr').innerText = tc.presentAddr || '-';
+            document.getElementById('cv-show-perm-addr').innerText = tc.permAddr || '-';
+            document.getElementById('cv-show-education').innerText = tc.education || '-';
+            
+            const today = new Date();
+            document.getElementById('cv-current-date').innerText = today.toLocaleDateString('bn-BD');
+
+            const cvBox = document.getElementById('cv-display-container');
+            cvBox.style.display = 'block';
+            cvBox.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function submitTeacherApplication(e) {
+            e.preventDefault();
+            const teacherObj = {
+                id: Date.now(),
+                nameBn: document.getElementById('app-tc-name-bn').value,
+                nameEn: document.getElementById('app-tc-name-en').value,
+                designation: document.getElementById('app-tc-desig').value,
+                birthNo: document.getElementById('app-tc-birth').value,
+                nid: document.getElementById('app-tc-nid').value || '-',
+                fnameBn: document.getElementById('app-tc-fname-bn').value,
+                fnameEn: document.getElementById('app-tc-fname-en').value,
+                fnid: document.getElementById('app-tc-fnid').value || '-',
+                mnameBn: document.getElementById('app-tc-mname-bn').value,
+                mnameEn: document.getElementById('app-tc-mname-en').value,
+                mnid: document.getElementById('app-tc-mnid').value || '-',
+                religion: document.getElementById('app-tc-religion').value,
+                phone: document.getElementById('app-tc-phone').value,
+                presentAddr: document.getElementById('app-tc-present-addr').value,
+                permAddr: document.getElementById('app-tc-perm-addr').value,
+                education: document.getElementById('app-tc-edu').value,
+                photo: 'https://via.placeholder.com/120x140?text=Photo',
+                signature: 'https://via.placeholder.com/150x50?text=Signature'
+            };
+
+            const photoInput = document.getElementById('app-tc-photo');
+            const sigInput = document.getElementById('app-tc-sig');
+
+            const finalizeApp = function() {
+                teachersData.push(teacherObj);
+                saveData();
+                renderTeachers();
+                updateSummaryAndCharts();
+                e.target.reset();
+                alert('আপনার নিয়োগ আবেদনটি সফলভাবে জমা হয়েছে! কর্তৃপক্ষ আপনার তথ্যটি যাচাই করবে।');
+            };
+
+            const processSig = function() {
+                if(sigInput.files[0]) {
+                    compressAndConvertImage(sigInput.files[0], 300, 100, function(sigB64) {
+                        teacherObj.signature = sigB64;
+                        finalizeApp();
+                    });
+                } else { finalizeApp(); }
+            };
+
+            if(photoInput.files[0]) {
+                compressAndConvertImage(photoInput.files[0], 300, 350, function(photoB64) {
+                    teacherObj.photo = photoB64;
+                    processSig();
+                });
+            } else { processSig(); }
+        }
+
+        /* Scholarship */
+        function addScholarship() {
+            const name = document.getElementById('sch-name').value;
+            const cat = document.getElementById('sch-cat').value;
+            if(!name) { alert('নাম দিন'); return; }
+            const item = { name, cat, photo: 'https://via.placeholder.com/50' };
+            const photoIn = document.getElementById('sch-photo');
+            if(photoIn.files[0]) {
+                compressAndConvertImage(photoIn.files[0], 200, 200, function(b64){ item.photo = b64; scholarshipData.push(item); saveData(); renderScholarship(); updateSummaryAndCharts(); });
+            } else { scholarshipData.push(item); saveData(); renderScholarship(); updateSummaryAndCharts(); }
+            document.getElementById('sch-name').value = '';
+            document.getElementById('sch-cat').value = '';
+            photoIn.value = '';
+        }
+
+        function renderScholarship() {
+            const tbody = document.getElementById('scholarship-table-body');
+            tbody.innerHTML = '';
+            scholarshipData.forEach((sc, idx) => {
+                tbody.innerHTML += `<tr><td><img src="${sc.photo}" class="user-photo clickable-img" onclick="triggerImgChange(this)"></td><td>${sc.name}</td><td>${sc.cat}</td><td class="admin-only"><button class="btn btn-danger" onclick="scholarshipData.splice(${idx},1); saveData(); renderScholarship(); updateSummaryAndCharts();">ডিলিট</button></td></tr>`;
+            });
+        }
+
+        /* Gallery */
+        function addGalleryPhoto() {
+            const fileIn = document.getElementById('gal-file');
+            const cap = document.getElementById('gal-cap').value || 'ছবি';
+            if(fileIn.files[0]) {
+                compressAndConvertImage(fileIn.files[0], 800, 600, function(b64){
+                    galleryPhotos.push({ photo: b64, caption: cap });
+                    saveData();
+                    renderGallery();
+                    document.getElementById('gal-cap').value = '';
+                    fileIn.value = '';
+                });
+            } else { alert('ছবি সিলেক্ট করুন!'); }
+        }
+
+        function renderGallery() {
+            const container = document.getElementById('gallery-container');
+            container.innerHTML = '';
+            if(galleryPhotos.length === 0) {
+                container.innerHTML = '<p style="color:#777;">কোনো ছবি নেই।</p>';
+                return;
+            }
+            galleryPhotos.forEach((item, idx) => {
+                container.innerHTML += `
+                    <div class="gallery-item">
+                        <img src="${item.photo}">
+                        <div class="gallery-caption">${item.caption}</div>
+                        <div class="admin-only" style="padding:5px; text-align:center;">
+                            <button class="btn btn-danger" style="padding:3px 8px; font-size:0.8rem;" onclick="galleryPhotos.splice(${idx},1); saveData(); renderGallery();">ডিলিট</button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function submitAdmission(e) { e.preventDefault(); alert('ভর্তির আবেদন সফলভাবে জমা হয়েছে!'); e.target.reset(); }
+
+        function renderAll() {
+            applySettings();
+            renderStudents();
+            renderTeachers();
+            renderWaiver();
+            renderResults();
+            renderScholarship();
+            renderGallery();
+            document.getElementById('cfg-title').value = siteSettings.title;
+            document.getElementById('cfg-headteacher').value = siteSettings.headteacher;
+            document.getElementById('cfg-notice').value = siteSettings.notice;
+            document.getElementById('cfg-whatsapp').value = siteSettings.whatsapp || '';
+            document.getElementById('cfg-facebook').value = siteSettings.facebook || '';
+            document.getElementById('cfg-messenger').value = siteSettings.messenger || '';
+            document.getElementById('cfg-public-edit').checked = !!siteSettings.publicEditable;
+            document.getElementById('cfg-public-print').checked = !!siteSettings.publicPrintable;
+            document.getElementById('cfg-public-download').checked = !!siteSettings.publicDownloadable;
+            updatePermissions();
+        }
+
+        renderAll();
+    </script>
+</body>
+</html>
